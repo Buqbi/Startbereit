@@ -1,0 +1,1735 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F1517">
+<meta name="robots" content="noindex">
+<title>Startbereit</title>
+</head>
+<body>
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#0F1517;
+    --surface:#182124;
+    --surface-2:#1F2A2E;
+    --line:#2B3A40;
+    --text:#EDF2F2;
+    --text-dim:#8FA5AB;
+    --swim:#3987e5;
+    --bike:#d95926;
+    --run:#e66767;
+    --strength:#9085e9;
+    --nutri:#008300;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  .mono{
+    font-family:ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono",Consolas,monospace;
+    font-variant-numeric:tabular-nums;
+  }
+  a{color:inherit;}
+  .wrap{max-width:820px;margin:0 auto;padding:0 18px;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:relative;
+    padding:34px 0 0 0;
+    border-bottom:1px solid var(--line);
+    margin-bottom:18px;
+  }
+  .bib{
+    position:absolute;
+    top:18px; right:18px;
+    border:1px dashed var(--text-dim);
+    border-radius:6px;
+    padding:5px 10px;
+    font-size:11px;
+    letter-spacing:.08em;
+    color:var(--text-dim);
+    transform:rotate(3deg);
+  }
+  h1{
+    font-size:clamp(28px,6vw,40px);
+    font-weight:800;
+    letter-spacing:-.02em;
+    margin:0 0 4px 0;
+    text-transform:uppercase;
+  }
+  header p.sub{
+    color:var(--text-dim);
+    margin:0 0 22px 0;
+    font-size:15px;
+    max-width:52ch;
+  }
+  .splitbar{
+    display:flex;
+    height:34px;
+    border-radius:8px 8px 0 0;
+    overflow:hidden;
+  }
+  .splitbar span{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:#0F1517;
+  }
+  .splitbar .s-swim{background:var(--swim);}
+  .splitbar .s-bike{background:var(--bike);}
+  .splitbar .s-run{background:var(--run);}
+  .splitbar .s-strength{background:var(--strength);}
+
+  /* ---------- Tabs ---------- */
+  .tabs{
+    display:flex;
+    gap:6px;
+    margin:22px 0 20px 0;
+    position:sticky;
+    top: env(safe-area-inset-top, 0px);
+    background:var(--bg);
+    padding:10px 0;
+    z-index:5;
+  }
+  .tab{
+    flex:1;
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--text-dim);
+    padding:12px 10px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  .tab.active{
+    color:var(--bg);
+    background:var(--text);
+    border-color:var(--text);
+  }
+  .tab.tab-disabled{
+    opacity:.4;
+    cursor:not-allowed;
+  }
+  .tab:focus-visible, button:focus-visible, input:focus-visible, .chip:focus-visible{
+    outline:2px solid var(--nutri);
+    outline-offset:2px;
+  }
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  /* ---------- Cards / Fields ---------- */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
+    margin-bottom:16px;
+  }
+  .card h2{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--text-dim);
+    margin:0 0 14px 0;
+  }
+  .field{margin-bottom:16px;}
+  .field:last-child{margin-bottom:0;}
+  .field label.title{
+    display:block;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .chip-group{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip-group input{position:absolute;opacity:0;width:0;height:0;}
+  .chip{
+    display:inline-block;
+    padding:9px 14px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:var(--surface-2);
+    color:var(--text-dim);
+    font-size:13px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .chip-group input:checked + .chip{
+    background:var(--text);
+    color:var(--bg);
+    border-color:var(--text);
+    font-weight:700;
+  }
+  input[type=number], input[type=text], select{
+    width:100%;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:11px 12px;
+    border-radius:8px;
+    font-size:15px;
+    font-family:inherit;
+  }
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  input[type=range]{width:100%;accent-color:var(--nutri);}
+  .rangeval{display:flex;justify-content:space-between;font-size:12px;color:var(--text-dim);margin-top:4px;}
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;}
+  .switch{position:relative;display:inline-block;width:46px;height:26px;flex:none;}
+  .switch input{opacity:0;width:0;height:0;position:absolute;}
+  .slider-el{position:absolute;inset:0;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;transition:.15s;}
+  .slider-el:before{content:"";position:absolute;height:18px;width:18px;left:3px;top:3px;background:var(--text-dim);border-radius:50%;transition:.15s;}
+  .switch input:checked + .slider-el{background:var(--nutri);border-color:var(--nutri);}
+  .switch input:checked + .slider-el:before{transform:translateX(20px);background:var(--bg);}
+  .hint{font-size:12px;color:var(--text-dim);margin-top:6px;}
+
+  .btn-primary{
+    width:100%;
+    background:var(--nutri);
+    color:#0F1517;
+    border:none;
+    padding:14px;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    cursor:pointer;
+    margin-top:6px;
+  }
+  .btn-secondary{
+    width:100%;
+    background:transparent;
+    color:var(--text-dim);
+    border:1px solid var(--line);
+    padding:10px;
+    border-radius:8px;
+    font-size:13px;
+    cursor:pointer;
+    margin-top:10px;
+  }
+
+  /* ---------- Results ---------- */
+  .results{margin-top:22px;}
+  .summary-strip{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .summary-chip{
+    flex:1;
+    min-width:100px;
+    background:var(--surface-2);
+    border-radius:8px;
+    padding:12px;
+    border-left:4px solid var(--line);
+  }
+  .summary-chip .lbl{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;}
+  .summary-chip .val{font-size:19px;font-weight:800;margin-top:3px;}
+
+  .day-row{
+    display:flex;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .day-row:last-child{border-bottom:none;}
+  .day-name{
+    width:78px;
+    flex:none;
+    font-size:13px;
+    font-weight:700;
+    color:var(--text-dim);
+    padding-top:2px;
+  }
+  .day-sessions{flex:1;display:flex;flex-direction:column;gap:8px;}
+  .session{
+    border-left:3px solid var(--line);
+    padding:2px 0 2px 10px;
+  }
+  .session .s-name{font-size:14px;font-weight:600;}
+  .session .s-meta{font-size:12px;color:var(--text-dim);}
+  .rest-note{font-size:13px;color:var(--text-dim);font-style:italic;padding-top:2px;}
+
+  table.plan-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+  }
+  table.plan-table th{
+    text-align:left;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:var(--text-dim);
+    padding:6px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  table.plan-table td{
+    padding:9px 8px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  table.plan-table tr:last-child td{border-bottom:none;}
+  .totals-row td{font-weight:800;}
+
+  .disclaimer{
+    font-size:12px;
+    color:var(--text-dim);
+    background:var(--surface-2);
+    border-radius:8px;
+    padding:12px 14px;
+    margin-top:14px;
+  }
+  .warn{color:var(--run);font-weight:700;}
+
+  footer{
+    text-align:center;
+    color:var(--text-dim);
+    font-size:12px;
+    margin-top:40px;
+  }
+
+  @media (max-width:520px){
+    .row3{grid-template-columns:1fr;}
+    .day-row{flex-direction:column;gap:4px;}
+    .day-name{width:auto;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;}
+  }
+
+  /* ---------- Periodisierung ---------- */
+  .phase-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:4px;}
+  .phase-table th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);padding:6px 8px;border-bottom:1px solid var(--line);}
+  .phase-table td{padding:8px 8px;border-bottom:1px solid var(--line);}
+  .phase-table tr:last-child td{border-bottom:none;}
+  .phase-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;}
+  .week-select-row{display:flex;align-items:center;gap:10px;margin:16px 0 10px 0;}
+  .week-select-row label{font-size:13px;color:var(--text-dim);flex:none;}
+  .week-select-row select{width:auto;flex:1;}
+
+  /* ---------- Diagramme ---------- */
+  .chart-stackbar{display:flex;height:28px;border-radius:6px;overflow:hidden;border:1px solid var(--line);margin:10px 0 12px;}
+  .stackbar-seg{height:100%;}
+  .chart-legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12.5px;color:var(--text-dim);margin-bottom:2px;}
+  .legend-item{display:flex;align-items:center;gap:6px;}
+  .legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none;}
+  .legend-val{color:var(--text);font-weight:700;}
+
+  .chart-bars{display:flex;align-items:flex-end;gap:3px;height:120px;padding:10px 2px 0;border-bottom:1px solid var(--line);}
+  .vbar-col{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:5px;position:relative;}
+  .vbar-flag{position:absolute;top:-16px;font-size:11px;}
+  .vbar{width:100%;max-width:16px;background:var(--swim);border-radius:3px 3px 0 0;}
+  .vbar-recovery{opacity:0.5;}
+  .vbar-race{outline:2px solid var(--text);outline-offset:1px;}
+  .vbar-lbl{font-size:9px;color:var(--text-dim);margin-top:4px;}
+  .legend-swatch{width:12px;height:12px;border-radius:3px;display:inline-block;background:var(--swim);flex:none;}
+  .legend-swatch.legend-recovery{opacity:0.5;}
+  .legend-swatch.legend-race{outline:2px solid var(--text);outline-offset:1px;}
+
+  .chart-proportion{margin:8px 0 10px;}
+  .prop-track{height:18px;border-radius:9px;background:var(--surface-2);overflow:hidden;}
+  .prop-fill{height:100%;background:var(--run);border-radius:0 9px 9px 0;}
+  .prop-labels{display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-top:6px;}
+  .prop-labels b{color:var(--text);}
+
+  /* ---------- Lebensmittel-Datenbank ---------- */
+  .food-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);}
+  .food-row:last-child{border-bottom:none;}
+  .food-name{font-weight:700;font-size:14px;}
+  .food-cat{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;}
+  .food-macros{display:flex;gap:10px;flex:none;}
+  .food-macro{text-align:right;min-width:46px;}
+  .food-macro .n{font-size:14px;font-weight:800;font-family:ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono",Consolas,monospace;}
+  .food-macro .u{font-size:10px;color:var(--text-dim);display:block;}
+  .food-amount{width:64px;flex:none;text-align:right;padding:6px 8px !important;font-size:13px !important;}
+  .food-empty{color:var(--text-dim);font-size:13px;padding:8px 0;}
+
+  /* ---------- Print / PDF-Export ---------- */
+  .print-header{display:none;}
+  .btn-print{
+    width:100%;
+    background:transparent;
+    color:var(--text);
+    border:1px solid var(--line);
+    padding:12px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:10px;
+  }
+  @media print{
+    body{background:#fff;color:#111;padding-bottom:0;}
+    .tabs, header .bib, header .sub, .splitbar, .panel > .card, .btn-primary, .btn-secondary, .btn-print, footer{display:none !important;}
+    .print-header{display:block;margin-bottom:16px;}
+    .print-header h2{font-size:20px;margin:0 0 2px 0;}
+    .print-header .meta{font-size:12px;color:#555;}
+    .panel{display:block !important;}
+    .panel:not(.active){display:none !important;}
+    .summary-chip, .session, table.plan-table td, table.plan-table th, .phase-table td, .phase-table th{color:#111 !important;}
+    .summary-chip{background:#f2f2f2;border-left-color:#999 !important;}
+    .day-row, table.plan-table th, table.plan-table td, .phase-table th, .phase-table td{border-color:#ccc !important;}
+    .disclaimer{background:#f2f2f2;color:#333;}
+    .chart-legend, .prop-labels{color:#333;}
+    .legend-val, .prop-labels b{color:#111;}
+    .chart-stackbar, .chart-bars{border-color:#ccc;}
+    .chart-stackbar{border:1px solid #ccc;}
+    .prop-track{background:#eee;}
+    .vbar-lbl{color:#555;}
+    .legend-swatch.legend-race{outline-color:#111;}
+    .vbar-race{outline-color:#111;}
+    a[href]:after{content:"";}
+  }
+</style>
+<div class="wrap">
+
+  <header>
+    <div class="bib">SB · #2026</div>
+    <h1>Startbereit</h1>
+    <p class="sub">Dein Trainings- und Ernährungsplaner für Triathlon — von Sprint bis Ironman. Läuft komplett offline, direkt im Browser.</p>
+    <div class="splitbar">
+      <span class="s-swim">Schwimmen</span>
+      <span class="s-bike">Rad</span>
+      <span class="s-run">Laufen</span>
+      <span class="s-strength">Kraft</span>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="profil">Profil</button>
+    <button class="tab tab-disabled" data-tab="training" aria-disabled="true">Training</button>
+    <button class="tab tab-disabled" data-tab="ernaehrung" aria-disabled="true">Ernährung</button>
+  </nav>
+  <p class="hint" id="tabLockHint" style="margin:-10px 0 18px 0;">Fülle zuerst dein Profil aus (mindestens Gewicht, Größe und Alter), um Training &amp; Ernährung freizuschalten.</p>
+
+  <!-- ======================= PROFIL ======================= -->
+  <section class="panel active" id="panel-profil">
+    <div class="card">
+      <h2>Persönliche Daten</h2>
+      <p class="hint" style="margin-bottom:16px;">Gewicht, Größe und Alter schalten die anderen Reiter frei und fließen direkt in Trainingsumfang, Erholungsplanung und Kalorienbedarf ein. Alle weiteren Felder sind optional und verfeinern die Pläne zusätzlich. Alles bleibt ausschließlich lokal auf diesem Gerät.</p>
+      <div class="row2">
+        <div class="field"><span class="title">Gewicht (kg)</span><input type="number" id="bioWeight" min="30" max="200" step="0.5" placeholder="z. B. 72"></div>
+        <div class="field"><span class="title">Körpergröße (cm)</span><input type="number" id="bioHeight" min="120" max="230" step="1" placeholder="z. B. 178"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><span class="title">Alter (Jahre)</span><input type="number" id="bioAge" min="10" max="100" step="1" placeholder="z. B. 34"></div>
+        <div class="field"><span class="title">Körperfettanteil (%, optional)</span><input type="number" id="bioBodyfat" min="3" max="60" step="0.5" placeholder="optional"></div>
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <span class="title">Biologisches Geschlecht (für Kalorienschätzung)</span>
+        <div class="chip-group" data-name="bioSex">
+          <input type="radio" name="bioSex" id="bs-keine" value="keine" checked><label class="chip" for="bs-keine">Keine Angabe</label>
+          <input type="radio" name="bioSex" id="bs-maennlich" value="maennlich"><label class="chip" for="bs-maennlich">Männlich</label>
+          <input type="radio" name="bioSex" id="bs-weiblich" value="weiblich"><label class="chip" for="bs-weiblich">Weiblich</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Herzfrequenz &amp; Erfahrung (optional)</h2>
+      <div class="row2">
+        <div class="field"><span class="title">Ruhepuls (bpm)</span><input type="number" id="bioRestingHR" min="30" max="120" step="1" placeholder="z. B. 55"></div>
+        <div class="field"><span class="title">Bekannter Maximalpuls (bpm)</span><input type="number" id="bioMaxHR" min="120" max="230" step="1" placeholder="falls getestet"></div>
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <span class="title">Trainingserfahrung im Ausdauersport (Jahre)</span>
+        <input type="number" id="bioExperience" min="0" max="60" step="0.5" placeholder="z. B. 2">
+        <div class="hint">Schlägt beim ersten Durchlauf ein passendes Erfahrungslevel im Training-Tab vor — dort jederzeit änderbar.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Aktuelle Einschränkung</h2>
+      <div class="field toggle-row" style="margin-bottom:0;">
+        <div>
+          <span class="title" style="margin-bottom:2px;">Verletzung / gesundheitliche Einschränkung aktuell vorhanden</span>
+          <div class="hint">Reduziert den geplanten Umfang automatisch als Sicherheitspuffer</div>
+        </div>
+        <label class="switch"><input type="checkbox" id="bioInjury"><span class="slider-el"></span></label>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="profileContinue">Weiter zu Training &amp; Ernährung</button>
+    <div class="hint" id="profileContinueHint" style="text-align:center;margin-top:8px;"></div>
+
+    <div class="disclaimer">Diese Angaben steuern u. a. Trainingsumfang, Erholungsfrequenz, Herzfrequenz-Zonen und Kalorienbedarf. Es sind Formelschätzungen auf Basis deiner Eingaben, keine Messwerte oder medizinische Einschätzung — bei gesundheitlichen Fragen bitte ärztlich/fachlich abklären.</div>
+
+    <div class="card">
+      <h2>Auf einem anderen Gerät weiternutzen</h2>
+      <p class="hint" style="margin-bottom:14px;">Diese Seite speichert alles nur lokal in diesem Browser. Um auf einem anderen Gerät (z. B. dem Handy) mit demselben Stand weiterzumachen, hier einen Code erzeugen und dort einspielen. Es gibt kein Konto und kein Login — jeder Code ist unabhängig.</p>
+      <div class="field">
+        <button type="button" class="btn-secondary" id="genProfileCode">Code für dieses Gerät erzeugen</button>
+        <textarea id="profileCodeOut" class="mono" readonly rows="3" style="display:none;width:100%;margin-top:10px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:10px;font-size:12px;resize:vertical;" onclick="this.select()"></textarea>
+        <button type="button" class="btn-secondary" id="copyProfileCode" style="display:none;margin-top:8px;">In Zwischenablage kopieren</button>
+        <div class="hint" id="copyProfileCodeHint"></div>
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <span class="title">Code von einem anderen Gerät einspielen</span>
+        <textarea id="profileCodeIn" class="mono" rows="3" placeholder="Code hier einfügen…" style="width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:10px;font-size:12px;resize:vertical;"></textarea>
+        <button type="button" class="btn-primary" id="applyProfileCode" style="margin-top:8px;">Code einspielen</button>
+        <div class="hint" id="applyProfileCodeHint"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TRAINING ======================= -->
+  <section class="panel" id="panel-training">
+    <div class="card">
+      <h2>Wettkampf &amp; Level</h2>
+      <div class="field">
+        <span class="title">Distanz</span>
+        <div class="chip-group" data-name="distance">
+          <input type="radio" name="distance" id="d-sprint" value="sprint"><label class="chip" for="d-sprint">Sprint</label>
+          <input type="radio" name="distance" id="d-olympic" value="olympic" checked><label class="chip" for="d-olympic">Olympisch</label>
+          <input type="radio" name="distance" id="d-mittel" value="mitteldistanz"><label class="chip" for="d-mittel">Mitteldistanz (70.3)</label>
+          <input type="radio" name="distance" id="d-lang" value="langdistanz"><label class="chip" for="d-lang">Langdistanz (Ironman)</label>
+        </div>
+      </div>
+      <div class="field">
+        <span class="title">Erfahrungslevel</span>
+        <div class="chip-group" data-name="level">
+          <input type="radio" name="level" id="l-einsteiger" value="einsteiger"><label class="chip" for="l-einsteiger">Einsteiger</label>
+          <input type="radio" name="level" id="l-fortgeschritten" value="fortgeschritten" checked><label class="chip" for="l-fortgeschritten">Fortgeschritten</label>
+          <input type="radio" name="level" id="l-erfahren" value="erfahren"><label class="chip" for="l-erfahren">Erfahren</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Umfang</h2>
+      <div class="field">
+        <span class="title">Trainingstage pro Woche (zzgl. Montag als Basis-Ruhetag)</span>
+        <input type="range" min="3" max="6" value="4" id="daysPerWeek">
+        <div class="rangeval"><span>3</span><span id="daysPerWeekVal" class="mono">4</span><span>6</span></div>
+      </div>
+      <div class="field toggle-row">
+        <div>
+          <span class="title" style="margin-bottom:2px;">Krafttraining einbauen</span>
+          <div class="hint">2× pro Woche, kurze Einheiten (Rumpf &amp; Stabilität)</div>
+        </div>
+        <label class="switch"><input type="checkbox" id="includeStrength" checked><span class="slider-el"></span></label>
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <span class="title">Schwachpunkt priorisieren (optional)</span>
+        <div class="chip-group" data-name="focus">
+          <input type="radio" name="focus" id="f-none" value="none" checked><label class="chip" for="f-none">Keine</label>
+          <input type="radio" name="focus" id="f-swim" value="swim"><label class="chip" for="f-swim">Schwimmen</label>
+          <input type="radio" name="focus" id="f-bike" value="bike"><label class="chip" for="f-bike">Rad</label>
+          <input type="radio" name="focus" id="f-run" value="run"><label class="chip" for="f-run">Laufen</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Zeitraum</h2>
+      <div class="field toggle-row" style="margin-bottom:0;">
+        <div>
+          <span class="title" style="margin-bottom:2px;">Mehrwöchigen Trainingsblock erstellen</span>
+          <div class="hint">Periodisierung mit Grundlage, Aufbau, Spezifisch &amp; Taper bis zum Wettkampf</div>
+        </div>
+        <label class="switch"><input type="checkbox" id="usePeriodization"><span class="slider-el"></span></label>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="genTraining">Trainingsplan erstellen</button>
+
+    <div class="print-header"><h2>Startbereit — Trainingsplan</h2><div class="meta" id="printMetaTraining"></div></div>
+    <div class="results" id="trainingResults"></div>
+    <button class="btn-print" id="printTraining" style="display:none;">Trainingsplan als PDF exportieren (Drucken)</button>
+    <p class="hint" id="printHintTraining" style="display:none;text-align:center;margin-top:6px;">Öffnet sich kein Druckdialog? Diese Funktion braucht die separat verschickte Datei, lokal im eigenen Browser geöffnet.</p>
+  </section>
+
+  <!-- ======================= ERNÄHRUNG ======================= -->
+  <section class="panel" id="panel-ernaehrung">
+    <div class="card">
+      <h2>Tagesziel</h2>
+      <div class="field">
+        <span class="title">Kalorienziel (kcal / Tag)</span>
+        <input type="number" id="kcalTarget" value="2800" min="1000" max="7000" step="10">
+        <button type="button" class="btn-secondary" id="estimateKcal" style="margin-top:8px;">Aus Profil schätzen</button>
+        <div class="hint" id="estimateKcalHint"></div>
+      </div>
+      <div class="field">
+        <span class="title">Makros festlegen über</span>
+        <div class="chip-group" data-name="macroMode">
+          <input type="radio" name="macroMode" id="mm-percent" value="percent" checked><label class="chip" for="mm-percent">Verteilung (%)</label>
+          <input type="radio" name="macroMode" id="mm-grams" value="grams"><label class="chip" for="mm-grams">Gramm direkt</label>
+        </div>
+      </div>
+
+      <div class="field" id="percentBlock">
+        <span class="title">Preset</span>
+        <div class="chip-group" data-name="macroPreset">
+          <input type="radio" name="macroPreset" id="mp-ausdauer" value="ausdauer" checked><label class="chip" for="mp-ausdauer">Ausdauer-Fokus (55/20/25)</label>
+          <input type="radio" name="macroPreset" id="mp-ausgewogen" value="ausgewogen"><label class="chip" for="mp-ausgewogen">Ausgewogen (45/25/30)</label>
+          <input type="radio" name="macroPreset" id="mp-eiweiss" value="eiweiss"><label class="chip" for="mp-eiweiss">Eiweißbetont (35/35/30)</label>
+        </div>
+        <div class="hint">Angaben in Kohlenhydrate / Protein / Fett %</div>
+      </div>
+
+      <div class="field" id="gramsBlock" style="display:none;">
+        <span class="title">Makros in Gramm</span>
+        <div class="row3">
+          <div><label class="hint">Protein (g)</label><input type="number" id="gProtein" value="150" min="0"></div>
+          <div><label class="hint">Kohlenhydrate (g)</label><input type="number" id="gCarbs" value="350" min="0"></div>
+          <div><label class="hint">Fett (g)</label><input type="number" id="gFat" value="80" min="0"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="title">Mahlzeiten pro Tag</span>
+        <select id="mealsCount">
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </div>
+
+      <div class="field" style="margin-bottom:0;">
+        <span class="title">Ernährungsstil (für Essensvorschläge)</span>
+        <div class="chip-group" data-name="dietStyle">
+          <input type="radio" name="dietStyle" id="ds-omni" value="omnivor" checked><label class="chip" for="ds-omni">Omnivor</label>
+          <input type="radio" name="dietStyle" id="ds-vegi" value="vegetarisch"><label class="chip" for="ds-vegi">Vegetarisch</label>
+          <input type="radio" name="dietStyle" id="ds-vegan" value="vegan"><label class="chip" for="ds-vegan">Vegan</label>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="genNutrition">Ernährungsplan erstellen</button>
+
+    <div class="print-header"><h2>Startbereit — Ernährungsplan</h2><div class="meta" id="printMetaNutrition"></div></div>
+    <div class="results" id="nutritionResults"></div>
+
+    <div class="card">
+      <h2>Lebensmittel-Datenbank</h2>
+      <p class="hint" style="margin-bottom:10px;">Echte Nährwerte pro 100&nbsp;g nachschlagen und auf eine Portionsgröße umrechnen — z. B. um die Beispiele oben durch eigene Lebensmittel zu ersetzen.</p>
+      <input type="text" id="foodSearch" placeholder="Lebensmittel suchen (z. B. Reis, Quark, Tofu)…" autocomplete="off">
+      <div id="foodSearchResults"></div>
+    </div>
+
+    <div class="card">
+      <h2>Renn-Tag-Fueling</h2>
+      <p class="hint" style="margin-bottom:14px;">Kohlenhydrat-, Flüssigkeits- und Natriumbedarf während des Wettkampfs selbst — getrennt vom Tagesziel oben. Basiert auf der Distanz aus dem Training-Tab: <span id="fuelDistanceLabel" class="mono">Olympisch</span>.</p>
+      <div class="field">
+        <span class="title">Geschätzte Zielzeit</span>
+        <div class="row2">
+          <div><label class="hint">Stunden</label><input type="number" id="fuelHours" min="0" max="20" step="1" value="2"></div>
+          <div><label class="hint">Minuten</label><input type="number" id="fuelMinutes" min="0" max="59" step="5" value="45"></div>
+        </div>
+        <button type="button" class="btn-secondary" id="fuelSuggestTime" style="margin-top:8px;">Richtwert für meine Distanz/Level vorschlagen</button>
+      </div>
+    </div>
+    <button class="btn-primary" id="genFueling">Fueling-Bedarf berechnen</button>
+    <div class="results" id="fuelingResults"></div>
+    <button class="btn-print" id="printNutrition" style="display:none;">Ernährungsplan als PDF exportieren (Drucken)</button>
+    <p class="hint" id="printHintNutrition" style="display:none;text-align:center;margin-top:6px;">Öffnet sich kein Druckdialog? Diese Funktion braucht die separat verschickte Datei, lokal im eigenen Browser geöffnet.</p>
+  </section>
+
+  <button class="btn-secondary" id="resetAll">Alle Eingaben zurücksetzen</button>
+
+  <footer>Vorlagen-Generator · ersetzt keine individuelle sportmedizinische oder ernährungsfachliche Beratung.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- Tabs ---------------- */
+  var tabs = document.querySelectorAll(".tab");
+  function switchTab(name){
+    tabs.forEach(function(x){x.classList.remove("active");});
+    document.querySelector('.tab[data-tab="'+name+'"]').classList.add("active");
+    document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});
+    document.getElementById("panel-" + name).classList.add("active");
+    if(name === "ernaehrung" && typeof DISTANCE_LABEL !== "undefined"){
+      var lbl = document.getElementById("fuelDistanceLabel");
+      if(lbl){ lbl.textContent = DISTANCE_LABEL[val("distance")]; }
+    }
+  }
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){
+      if(t.classList.contains("tab-disabled")){
+        document.getElementById("tabLockHint").style.fontWeight = "700";
+        setTimeout(function(){ document.getElementById("tabLockHint").style.fontWeight = ""; }, 900);
+        return;
+      }
+      switchTab(t.dataset.tab);
+    });
+  });
+
+  /* ---------------- Helpers ---------------- */
+  function round5(n){ return Math.max(0, Math.round(n/5)*5); }
+  function fmtHM(mins){
+    var h = Math.floor(mins/60), m = mins % 60;
+    return h + ":" + (m<10?"0"+m:m) + " h";
+  }
+  function val(name){
+    var el = document.querySelector('input[name="'+name+'"]:checked');
+    return el ? el.value : null;
+  }
+  function getState(key, fallback){
+    try{
+      var raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    }catch(e){ return fallback; }
+  }
+  function setState(key, obj){
+    try{ localStorage.setItem(key, JSON.stringify(obj)); }catch(e){}
+  }
+
+  var lastWeeklyMinutes = null;
+
+  /* ---------------- Profil (Biodaten) ---------------- */
+  function readProfile(){
+    function numOrNull(id){
+      var v = document.getElementById(id).value;
+      return v === "" ? null : parseFloat(v);
+    }
+    return {
+      weight: numOrNull("bioWeight"),
+      height: numOrNull("bioHeight"),
+      bodyfat: numOrNull("bioBodyfat"),
+      age: numOrNull("bioAge"),
+      sex: val("bioSex"),
+      restingHR: numOrNull("bioRestingHR"),
+      maxHR: numOrNull("bioMaxHR"),
+      experienceYears: numOrNull("bioExperience"),
+      injury: document.getElementById("bioInjury").checked
+    };
+  }
+
+  function profileIsCoreComplete(p){
+    return p.weight != null && p.weight > 0 && p.height != null && p.height > 0 && p.age != null && p.age > 0;
+  }
+
+  function updateTabLock(){
+    var p = readProfile();
+    var complete = profileIsCoreComplete(p);
+    var trainingTab = document.querySelector('.tab[data-tab="training"]');
+    var nutritionTab = document.querySelector('.tab[data-tab="ernaehrung"]');
+    [trainingTab, nutritionTab].forEach(function(t){
+      if(complete){ t.classList.remove("tab-disabled"); t.removeAttribute("aria-disabled"); }
+      else{ t.classList.add("tab-disabled"); t.setAttribute("aria-disabled","true"); }
+    });
+    document.getElementById("tabLockHint").style.display = complete ? "none" : "";
+    return complete;
+  }
+
+  ["bioWeight","bioHeight","bioAge"].forEach(function(id){
+    document.getElementById(id).addEventListener("input", updateTabLock);
+  });
+
+  document.getElementById("profileContinue").addEventListener("click", function(){
+    var p = readProfile();
+    if(!updateTabLock()){
+      document.getElementById("profileContinueHint").textContent = "Bitte noch Gewicht, Größe und Alter ergänzen.";
+      return;
+    }
+    document.getElementById("profileContinueHint").textContent = "";
+    var existingTraining = getState("startbereit_training", null);
+    if(!existingTraining && p.experienceYears != null){
+      var suggested = p.experienceYears < 1 ? "einsteiger" : (p.experienceYears <= 3 ? "fortgeschritten" : "erfahren");
+      document.getElementById("l-"+suggested).checked = true;
+    }
+    switchTab("training");
+  });
+
+  var HR_ZONES = [
+    {name:"Zone 1 · Regeneration", lo:0.50, hi:0.60},
+    {name:"Zone 2 · Grundlage",    lo:0.60, hi:0.70},
+    {name:"Zone 3 · Tempo",        lo:0.70, hi:0.80},
+    {name:"Zone 4 · Schwelle",     lo:0.80, hi:0.90},
+    {name:"Zone 5 · VO2max",       lo:0.90, hi:1.00}
+  ];
+
+  function getHRMax(profile){
+    if(profile.maxHR){ return {value: profile.maxHR, measured:true}; }
+    if(profile.age){ return {value: 220 - profile.age, measured:false}; }
+    return null;
+  }
+
+  function renderHRZonesCard(profile){
+    var hrmaxInfo = getHRMax(profile);
+    if(!hrmaxInfo){ return ""; }
+    var hrmax = hrmaxInfo.value;
+    var useKarvonen = profile.restingHR != null;
+    var titleBits = "HFmax " + (hrmaxInfo.measured ? "(angegeben) " : "≈ ") + hrmax + " bpm" +
+      (useKarvonen ? ", Karvonen-Methode mit Ruhepuls " + profile.restingHR + " bpm" : "");
+    var html = '<div class="card"><h2>Geschätzte Herzfrequenz-Zonen (' + titleBits + ')</h2>' +
+      '<table class="phase-table"><thead><tr><th>Zone</th><th>Bereich</th></tr></thead><tbody>';
+    HR_ZONES.forEach(function(z){
+      var lo, hi;
+      if(useKarvonen){
+        lo = Math.round((hrmax - profile.restingHR) * z.lo + profile.restingHR);
+        hi = Math.round((hrmax - profile.restingHR) * z.hi + profile.restingHR);
+      } else {
+        lo = Math.round(hrmax * z.lo);
+        hi = Math.round(hrmax * z.hi);
+      }
+      html += '<tr><td>' + z.name + '</td><td class="mono">' + lo + '–' + hi + ' bpm</td></tr>';
+    });
+    html += '</tbody></table></div>' +
+      '<div class="disclaimer">' + (hrmaxInfo.measured ? "Auf Basis deines angegebenen Maximalpulses" : "Formelschätzung (220 − Alter)") +
+      (useKarvonen ? " und der Karvonen-Methode (genauer als reine %HFmax-Zonen)." : ", keine individuelle Leistungsdiagnostik.") +
+      ' Bei Testwerten aus einer Leistungsdiagnostik diese immer bevorzugen.</div>';
+    return html;
+  }
+
+  function buildTrainingAdjustmentNotes(profile){
+    var notes = [];
+    if(profile.age && profile.age >= 50){
+      notes.push("Altersanpassung (50+): Umfang leicht reduziert, Erholungswochen alle 3 statt 4 Wochen eingeplant.");
+    }
+    if(profile.injury){
+      notes.push("Aufgrund der angegebenen aktuellen Einschränkung wurde der Umfang um rund 30% reduziert — bitte in Rücksprache mit Physio/Arzt langsam steigern.");
+    }
+    return notes;
+  }
+
+  function activityFactorFromMinutes(minutes){
+    if(minutes == null){ return 1.55; }
+    var hours = minutes / 60;
+    if(hours < 4) return 1.375;
+    if(hours < 8) return 1.55;
+    if(hours < 12) return 1.725;
+    return 1.9;
+  }
+
+  function computeBMR(profile){
+    if(profile.weight && profile.bodyfat){
+      var lbm = profile.weight * (1 - profile.bodyfat/100);
+      return {bmr: 370 + 21.6*lbm, method:"Katch-McArdle (aus Körperfettanteil)"};
+    }
+    if(profile.weight && profile.height && profile.age){
+      var offset = profile.sex === "maennlich" ? 5 : (profile.sex === "weiblich" ? -161 : -78);
+      var bmr = 10*profile.weight + 6.25*profile.height - 5*profile.age + offset;
+      return {bmr: bmr, method:"Mifflin-St Jeor" + (profile.sex === "keine" ? " (geschlechtsneutrale Näherung)" : "")};
+    }
+    return null;
+  }
+
+  /* ================= TRAINING ================= */
+  var DISC = {
+    swim:{name:"Schwimmen", color:"var(--swim)"},
+    bike:{name:"Rad", color:"var(--bike)"},
+    run:{name:"Laufen", color:"var(--run)"},
+    strength:{name:"Kraft", color:"var(--strength)"}
+  };
+
+  var SESSION_TEMPLATE = [
+    {day:"Dienstag",   disc:"swim", label:"Technik & Kraulschule",      base:30, priority:5, long:false, intensity:"easy", zone:"Zone 1–2"},
+    {day:"Mittwoch",   disc:"bike", label:"Tempo-Intervalle",           base:45, priority:3, long:false, intensity:"hard", zone:"Zone 3–4"},
+    {day:"Donnerstag", disc:"swim", label:"Ausdauereinheit",            base:40, priority:4, long:false, intensity:"easy", zone:"Zone 2"},
+    {day:"Freitag",    disc:"run",  label:"Lauf-Intervalle",            base:30, priority:2, long:false, intensity:"hard", zone:"Zone 4–5"},
+    {day:"Samstag",    disc:"bike", label:"Lange Grundlageneinheit",    base:75, priority:1, long:true,  intensity:"easy", zone:"Zone 2"},
+    {day:"Sonntag",    disc:"run",  label:"Langer Dauerlauf",           base:45, priority:1, long:true,  intensity:"easy", zone:"Zone 2"}
+  ];
+  var INTENSITY_LABEL = {easy:"locker", hard:"intensiv"};
+  var DAY_ORDER = ["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
+
+  var DISTANCE_FACTOR = {sprint:0.7, olympic:1.0, mitteldistanz:1.6, langdistanz:2.3};
+  var LONG_FACTOR      = {sprint:0.9, olympic:1.3, mitteldistanz:2.4, langdistanz:4.0};
+  var LEVEL_FACTOR     = {einsteiger:0.8, fortgeschritten:1.0, erfahren:1.2};
+  var DISTANCE_LABEL   = {sprint:"Sprint", olympic:"Olympisch", mitteldistanz:"Mitteldistanz (70.3)", langdistanz:"Langdistanz (Ironman)"};
+
+  function computeTrainingPlan(cfg, profile){
+    var levelF = LEVEL_FACTOR[cfg.level];
+    if(profile && profile.age && profile.age >= 50){ levelF *= 0.9; }
+    if(profile && profile.injury){ levelF *= 0.7; }
+    var sessions = SESSION_TEMPLATE.map(function(s){
+      var factor = s.long ? LONG_FACTOR[cfg.distance] : DISTANCE_FACTOR[cfg.distance];
+      var focusBoost = (cfg.focus === s.disc) ? 1.15 : 1;
+      var prio = s.priority - (cfg.focus === s.disc ? 2 : 0);
+      return {
+        day:s.day, disc:s.disc, label:s.label,
+        duration: round5(s.base * levelF * factor * focusBoost),
+        priority: Math.max(1, prio),
+        intensity: s.intensity, zone: s.zone
+      };
+    });
+
+    // Zuerst je eine Einheit pro Disziplin garantieren (beste Priorität je Disziplin),
+    // erst danach mit den übrigen Einheiten nach Priorität auffüllen. Verhindert, dass
+    // bei wenigen Trainingstagen eine ganze Disziplin (z. B. Schwimmen) komplett fehlt.
+    var byDiscBest = {};
+    sessions.forEach(function(s){
+      if(!byDiscBest[s.disc] || s.priority < byDiscBest[s.disc].priority){ byDiscBest[s.disc] = s; }
+    });
+    var guaranteed = ["swim","bike","run"].map(function(d){ return byDiscBest[d]; }).filter(Boolean);
+    var rest = sessions.filter(function(s){ return guaranteed.indexOf(s) === -1; })
+      .sort(function(a,b){ return a.priority - b.priority; });
+    var kept = guaranteed.concat(rest).slice(0, Math.max(cfg.daysPerWeek, guaranteed.length));
+    var keptDays = kept.map(function(s){ return s.day; });
+
+    var byDay = {};
+    DAY_ORDER.forEach(function(d){ byDay[d] = []; });
+    sessions.forEach(function(s){
+      if(keptDays.indexOf(s.day) > -1){ byDay[s.day].push(s); }
+    });
+
+    if(cfg.includeStrength){
+      var strengthDays = ["Montag", (byDay["Donnerstag"] && byDay["Donnerstag"].length) ? "Donnerstag" : (keptDays[0] || "Montag")];
+      strengthDays.forEach(function(d){
+        byDay[d].push({
+          day:d, disc:"strength", label:"Rumpf- und Kraftstabilität",
+          duration: round5(30 * levelF)
+        });
+      });
+    }
+
+    var totals = {swim:0, bike:0, run:0, strength:0};
+    DAY_ORDER.forEach(function(d){
+      byDay[d].forEach(function(s){ totals[s.disc] += s.duration; });
+    });
+    var totalMinutes = totals.swim + totals.bike + totals.run + totals.strength;
+
+    return {byDay:byDay, totals:totals, totalMinutes:totalMinutes};
+  }
+
+  function weekBlockHTML(plan, cfg){
+    var html = "";
+    html += '<div class="summary-strip">';
+    html += summaryChip("Gesamt / Woche", fmtHM(plan.totalMinutes), "var(--text)");
+    html += summaryChip(DISC.swim.name, fmtHM(plan.totals.swim), DISC.swim.color);
+    html += summaryChip(DISC.bike.name, fmtHM(plan.totals.bike), DISC.bike.color);
+    html += summaryChip(DISC.run.name, fmtHM(plan.totals.run), DISC.run.color);
+    if(cfg.includeStrength){ html += summaryChip(DISC.strength.name, fmtHM(plan.totals.strength), DISC.strength.color); }
+    html += '</div>';
+
+    var compSegments = [
+      {label: DISC.swim.name, value: plan.totals.swim, valueLabel: fmtHM(plan.totals.swim), color: DISC.swim.color},
+      {label: DISC.bike.name, value: plan.totals.bike, valueLabel: fmtHM(plan.totals.bike), color: DISC.bike.color}
+    ];
+    if(cfg.includeStrength){ compSegments.push({label: DISC.strength.name, value: plan.totals.strength, valueLabel: fmtHM(plan.totals.strength), color: DISC.strength.color}); }
+    compSegments.push({label: DISC.run.name, value: plan.totals.run, valueLabel: fmtHM(plan.totals.run), color: DISC.run.color});
+    html += '<div class="card"><h2>Wochen-Zusammensetzung</h2>' +
+      stackedBarChart(compSegments, "Trainingsumfang je Disziplin, gesamt " + fmtHM(plan.totalMinutes)) + '</div>';
+
+    html += '<div class="card">';
+    DAY_ORDER.forEach(function(day){
+      var sess = plan.byDay[day];
+      html += '<div class="day-row"><div class="day-name">' + day + '</div><div class="day-sessions">';
+      if(sess.length === 0){
+        html += '<div class="rest-note">Ruhetag / Regeneration</div>';
+      } else {
+        sess.forEach(function(s){
+          var zoneTag = s.zone ? ' · ' + s.zone : '';
+          html += '<div class="session" style="border-left-color:' + DISC[s.disc].color + '">' +
+            '<div class="s-name">' + DISC[s.disc].name + ' — ' + s.label + '</div>' +
+            '<div class="s-meta mono">' + s.duration + ' min' + zoneTag + '</div></div>';
+        });
+      }
+      html += '</div></div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function renderTrainingPlan(plan, cfg){
+    var html = weekBlockHTML(plan, cfg);
+    html += intensityDistributionHTML(plan);
+    html += '<div class="disclaimer">Vorlage auf Basis deiner Auswahl (' + DISTANCE_LABEL[cfg.distance] + ', ' + cfg.level + '). ' +
+      'Insbesondere für die Ironman-Distanz ersetzt dieser Plan keine individuelle Trainingssteuerung durch eine Trainerin oder einen Trainer — nutze ihn als Grundgerüst.</div>';
+    document.getElementById("trainingResults").innerHTML = html;
+  }
+
+  function summaryChip(label, value, color){
+    return '<div class="summary-chip" style="border-left-color:' + color + '">' +
+      '<div class="lbl">' + label + '</div><div class="val mono">' + value + '</div></div>';
+  }
+
+  /* ---------- Chart-Helfer (Diagramme statt reiner Tabellen) ---------- */
+  function escAttr(s){
+    return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+  }
+
+  // Gestapelter horizontaler Balken für Zusammensetzungen (z. B. Wochenumfang je Disziplin)
+  function stackedBarChart(segments, ariaLabel){
+    var total = segments.reduce(function(s,x){ return s + x.value; }, 0);
+    if(total <= 0){ return ""; }
+    var visible = segments.filter(function(s){ return s.value > 0; });
+    var bar = '<div class="chart-stackbar" role="img" aria-label="' + escAttr(ariaLabel) + '">';
+    visible.forEach(function(seg){
+      var pct = (seg.value/total*100);
+      bar += '<div class="stackbar-seg" style="width:' + pct.toFixed(2) + '%;background:' + seg.color + '" title="' + escAttr(seg.label + ': ' + seg.valueLabel) + '"></div>';
+    });
+    bar += '</div>';
+    var legend = '<div class="chart-legend">';
+    visible.forEach(function(seg){
+      legend += '<div class="legend-item"><span class="legend-dot" style="background:' + seg.color + '"></span>' + seg.label + ' <span class="legend-val mono">' + seg.valueLabel + '</span></div>';
+    });
+    legend += '</div>';
+    return bar + legend;
+  }
+
+  // Wochenvolumen über einen Trainingsblock: ein Balken pro Woche, Regenerations-/Wettkampfwoche visuell markiert
+  function weeklyVolumeChart(weeks){
+    var maxMin = Math.max.apply(null, weeks.map(function(w){ return w.plan.totalMinutes; }));
+    if(!(maxMin > 0)){ return ""; }
+    var bars = '<div class="chart-bars" role="img" aria-label="Wöchentliches Trainingsvolumen über den Trainingsblock">';
+    weeks.forEach(function(w){
+      var h = Math.max(4, Math.round((w.plan.totalMinutes/maxMin)*100));
+      var cls = "vbar" + (w.isRecovery ? " vbar-recovery" : "") + (w.isRaceWeek ? " vbar-race" : "");
+      var tag = w.isRaceWeek ? " (Wettkampf)" : (w.isRecovery ? " (Regeneration)" : "");
+      bars += '<div class="vbar-col" title="Woche ' + w.weekNumber + ' — ' + escAttr(w.phaseName) + tag + ': ' + fmtHM(w.plan.totalMinutes) + '">' +
+        (w.isRaceWeek ? '<div class="vbar-flag">🏁</div>' : '') +
+        '<div class="' + cls + '" style="height:' + h + '%"></div>' +
+        '<div class="vbar-lbl mono">' + w.weekNumber + '</div></div>';
+    });
+    bars += '</div>';
+    var legend = '<div class="chart-legend">' +
+      '<div class="legend-item"><span class="legend-swatch"></span>Normale Woche</div>' +
+      '<div class="legend-item"><span class="legend-swatch legend-recovery"></span>Regenerationswoche</div>' +
+      '<div class="legend-item"><span class="legend-swatch legend-race"></span>🏁 Taper-/Wettkampfwoche</div>' +
+      '</div>';
+    return bars + legend;
+  }
+
+  // Anteils-Balken (z. B. locker/intensiv): eine Farbe + neutrale Restfläche statt zweier Kategorien
+  function proportionBar(pct, leftLabel, rightLabel, color, ariaLabel){
+    return '<div class="chart-proportion" role="img" aria-label="' + escAttr(ariaLabel) + '">' +
+      '<div class="prop-track"><div class="prop-fill" style="width:' + pct + '%;background:' + color + '"></div></div>' +
+      '<div class="prop-labels"><span>' + leftLabel + '</span><span>' + rightLabel + '</span></div></div>';
+  }
+
+  function computeIntensityDistribution(plan){
+    var easy = 0, hard = 0;
+    DAY_ORDER.forEach(function(d){
+      plan.byDay[d].forEach(function(s){
+        if(!s.intensity){ return; } // Kraft zählt nicht in die Ausdauer-Intensitätsverteilung
+        if(s.intensity === "easy"){ easy += s.duration; } else { hard += s.duration; }
+      });
+    });
+    var total = easy + hard;
+    if(total === 0){ return null; }
+    var easyPct = Math.round((easy/total)*100);
+    return {easy:easy, hard:hard, total:total, easyPct:easyPct, hardPct:100-easyPct};
+  }
+
+  function intensityDistributionHTML(plan){
+    var d = computeIntensityDistribution(plan);
+    if(!d){ return ""; }
+    var status, statusClass;
+    if(d.easyPct >= 75 && d.easyPct <= 90){ status = "entspricht dem bewährten 80/20-Prinzip"; statusClass = ""; }
+    else if(d.easyPct > 90){ status = "sehr locker-lastig — bei Bedarf mehr Raum für die intensiven Einheiten lassen"; statusClass = ""; }
+    else { status = "intensiver als die evidenzbasierte 80/20-Verteilung (80% locker / 20% intensiv) — Risiko für Übertraining/Stagnation steigt"; statusClass = "warn"; }
+    return '<div class="card"><h2>Intensitätsverteilung (Ausdauer, ohne Kraft)</h2>' +
+      proportionBar(d.hardPct,
+        "Locker (Z1–2) · <b>" + d.easyPct + "%</b> · " + fmtHM(d.easy),
+        "Intensiv (Z3–5) · <b>" + d.hardPct + "%</b> · " + fmtHM(d.hard),
+        "var(--run)",
+        "Intensitätsverteilung: " + d.easyPct + "% locker, " + d.hardPct + "% intensiv") +
+      '<div class="hint' + (statusClass?" "+statusClass:"") + '" style="margin-top:2px;">' + status + '.</div></div>';
+  }
+
+  /* ---------- Periodisierung ---------- */
+  var PHASES = [
+    {key:"grundlage",   name:"Grundlage",   color:"var(--swim)"},
+    {key:"aufbau",      name:"Aufbau",      color:"var(--bike)"},
+    {key:"spezifisch",  name:"Spezifisch",  color:"var(--run)"},
+    {key:"taper",       name:"Taper",       color:"var(--strength)"}
+  ];
+  var WEEKS_BY_DISTANCE = {
+    sprint:       {grundlage:4, aufbau:2, spezifisch:1, taper:1},
+    olympic:      {grundlage:4, aufbau:3, spezifisch:2, taper:1},
+    mitteldistanz:{grundlage:6, aufbau:4, spezifisch:3, taper:1},
+    langdistanz:  {grundlage:8, aufbau:6, spezifisch:4, taper:2}
+  };
+  var RAMP = {
+    grundlage:[0.60, 0.85],
+    aufbau:[0.85, 1.05],
+    spezifisch:[1.00, 1.15],
+    taper:[0.60, 0.35]
+  };
+
+  function scalePlanSessions(basePlan, mult){
+    var byDay = {}, totals = {swim:0, bike:0, run:0, strength:0};
+    DAY_ORDER.forEach(function(d){
+      byDay[d] = basePlan.byDay[d].map(function(s){
+        var dur = round5(s.duration * mult);
+        totals[s.disc] += dur;
+        return {day:s.day, disc:s.disc, label:s.label, duration:dur, intensity:s.intensity, zone:s.zone};
+      });
+    });
+    return {byDay:byDay, totals:totals, totalMinutes: totals.swim+totals.bike+totals.run+totals.strength};
+  }
+
+  function computePeriodizedPlan(cfg, profile){
+    var phasesCfg = WEEKS_BY_DISTANCE[cfg.distance];
+    var basePlan = computeTrainingPlan(cfg, profile);
+    var recoveryInterval = (profile && profile.age && profile.age >= 50) ? 3 : 4;
+    var weeks = [];
+    var globalWeek = 0;
+    PHASES.forEach(function(phase){
+      var count = phasesCfg[phase.key];
+      var range = RAMP[phase.key];
+      for(var i=0;i<count;i++){
+        globalWeek++;
+        var t = count > 1 ? i/(count-1) : 1;
+        var mult = range[0] + (range[1]-range[0]) * t;
+        var isRecovery = (phase.key !== "taper") && (globalWeek % recoveryInterval === 0);
+        if(isRecovery){ mult = mult * 0.75; }
+        weeks.push({
+          weekNumber: globalWeek,
+          phaseKey: phase.key,
+          phaseName: phase.name,
+          color: phase.color,
+          isRecovery: isRecovery,
+          isRaceWeek: (phase.key === "taper" && i === count-1),
+          plan: scalePlanSessions(basePlan, mult)
+        });
+      }
+    });
+    return {weeks:weeks, phasesCfg:phasesCfg, totalWeeks:globalWeek};
+  }
+
+  function renderPeriodizedPlan(periodized, cfg){
+    var html = "";
+
+    html += '<div class="card"><h2>Phasenübersicht</h2><table class="phase-table"><thead><tr>' +
+      '<th>Phase</th><th>Wochen</th><th>Ø Wochenstunden</th></tr></thead><tbody>';
+    PHASES.forEach(function(phase){
+      var weeksInPhase = periodized.weeks.filter(function(w){ return w.phaseKey === phase.key; });
+      var avg = Math.round(weeksInPhase.reduce(function(sum,w){ return sum + w.plan.totalMinutes; },0) / weeksInPhase.length);
+      html += '<tr><td><span class="phase-dot" style="background:' + phase.color + '"></span>' + phase.name + '</td>' +
+        '<td class="mono">' + weeksInPhase.length + '</td><td class="mono">' + fmtHM(avg) + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+
+    html += '<div class="card"><h2>Trainingsvolumen pro Woche</h2>' + weeklyVolumeChart(periodized.weeks) + '</div>';
+
+    html += '<div class="card"><h2>Wochenverlauf (' + periodized.totalWeeks + ' Wochen)</h2><table class="phase-table"><thead><tr>' +
+      '<th>Wo.</th><th>Phase</th><th>Gesamt</th></tr></thead><tbody>';
+    periodized.weeks.forEach(function(w){
+      var tag = w.isRaceWeek ? " · Wettkampf" : (w.isRecovery ? " · Regeneration" : "");
+      html += '<tr><td class="mono">' + w.weekNumber + '</td>' +
+        '<td><span class="phase-dot" style="background:' + w.color + '"></span>' + w.phaseName + tag + '</td>' +
+        '<td class="mono">' + fmtHM(w.plan.totalMinutes) + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+
+    html += '<div class="week-select-row"><label for="weekSelect">Woche im Detail:</label><select id="weekSelect"></select></div>';
+    html += '<div id="weekDetail"></div>';
+
+    html += '<div class="disclaimer">Periodisierungs-Vorlage auf Basis deiner Auswahl (' + DISTANCE_LABEL[cfg.distance] + ', ' + cfg.level + '). ' +
+      'Ein echter Trainingsblock — besonders bis zur Ironman-Distanz — sollte laufend an Ermüdung, Tests und Alltag angepasst werden; das leistet nur ein Coach oder erfahrene Selbststeuerung, kein statisches Template.</div>';
+
+    document.getElementById("trainingResults").innerHTML = html;
+
+    var select = document.getElementById("weekSelect");
+    periodized.weeks.forEach(function(w, idx){
+      var opt = document.createElement("option");
+      var tag = w.isRaceWeek ? " (Wettkampf)" : (w.isRecovery ? " (Regeneration)" : "");
+      opt.value = idx;
+      opt.textContent = "Woche " + w.weekNumber + " — " + w.phaseName + tag;
+      select.appendChild(opt);
+    });
+    function showWeek(idx){
+      document.getElementById("weekDetail").innerHTML = weekBlockHTML(periodized.weeks[idx].plan, cfg) + intensityDistributionHTML(periodized.weeks[idx].plan);
+    }
+    select.addEventListener("change", function(){ showWeek(parseInt(this.value,10)); });
+    showWeek(0);
+  }
+
+  function readTrainingConfig(){
+    return {
+      distance: val("distance"),
+      level: val("level"),
+      daysPerWeek: parseInt(document.getElementById("daysPerWeek").value, 10),
+      includeStrength: document.getElementById("includeStrength").checked,
+      focus: val("focus"),
+      usePeriodization: document.getElementById("usePeriodization").checked
+    };
+  }
+
+  function fmtDate(){
+    return new Date().toLocaleDateString("de-DE", {day:"2-digit", month:"2-digit", year:"numeric"});
+  }
+
+  document.getElementById("daysPerWeek").addEventListener("input", function(){
+    document.getElementById("daysPerWeekVal").textContent = this.value;
+  });
+
+  document.getElementById("genTraining").addEventListener("click", function(){
+    var cfg = readTrainingConfig();
+    var profile = readProfile();
+    if(cfg.usePeriodization){
+      var periodized = computePeriodizedPlan(cfg, profile);
+      renderPeriodizedPlan(periodized, cfg);
+      var avgMin = Math.round(periodized.weeks.reduce(function(s,w){return s+w.plan.totalMinutes;},0) / periodized.weeks.length);
+      lastWeeklyMinutes = avgMin;
+    } else {
+      var plan = computeTrainingPlan(cfg, profile);
+      renderTrainingPlan(plan, cfg);
+      lastWeeklyMinutes = plan.totalMinutes;
+    }
+    var hrHtml = renderHRZonesCard(profile);
+    if(hrHtml){ document.getElementById("trainingResults").insertAdjacentHTML("beforeend", hrHtml); }
+    var notes = buildTrainingAdjustmentNotes(profile);
+    if(notes.length){
+      document.getElementById("trainingResults").insertAdjacentHTML("beforeend",
+        '<div class="disclaimer">' + notes.join(" ") + '</div>');
+    }
+    document.getElementById("printTraining").style.display = "";
+    document.getElementById("printHintTraining").style.display = "";
+    document.getElementById("printMetaTraining").textContent =
+      DISTANCE_LABEL[cfg.distance] + " · " + cfg.level + (cfg.usePeriodization ? " · mehrwöchiger Block" : " · Musterwoche") +
+      " · erzeugt am " + fmtDate();
+    setState("startbereit_training", cfg);
+  });
+
+  /* ================= ERNÄHRUNG ================= */
+  var MACRO_PRESETS = {
+    ausdauer:   {c:55, p:20, f:25, label:"Ausdauer-Fokus"},
+    ausgewogen: {c:45, p:25, f:30, label:"Ausgewogen"},
+    eiweiss:    {c:35, p:35, f:30, label:"Eiweißbetont"}
+  };
+
+  /* ---------- Lebensmittel-Datenbank (statisch, echte Nährwerte pro 100 g) ----------
+     Werte sind typische, publizierte Richtwerte (Rohzustand bzw. Trockenprodukt bei
+     Getreide/Hülsenfrüchten, wie in Nährwerttabellen üblich) — kein Live-Abruf, da die
+     veröffentlichte Seite keine externen Netzwerkanfragen stellen kann. Einzelne Chargen
+     /Marken können abweichen. kcal/p/c/f = Kalorien/Protein/Kohlenhydrate/Fett je 100 g. */
+  var FOOD_DB = {
+    "Hähnchenbrust":       {cat:"protein", kcal:110, p:23,  c:0,  f:1.2},
+    "Magerquark":          {cat:"protein", kcal:67,  p:12,  c:4,  f:0.2},
+    "Eier":                {cat:"protein", kcal:155, p:13,  c:1.1,f:11},
+    "Lachs":               {cat:"protein", kcal:208, p:20,  c:0,  f:13},
+    "Mageres Rinderhack":  {cat:"protein", kcal:145, p:21,  c:0,  f:6},
+    "Skyr":                {cat:"protein", kcal:63,  p:11,  c:4,  f:0.2},
+    "Linsen":              {cat:"protein", kcal:353, p:25,  c:52, f:1},
+    "Kichererbsen":        {cat:"protein", kcal:364, p:19,  c:61, f:6},
+    "Tofu":                {cat:"protein", kcal:145, p:15,  c:2,  f:9},
+    "Tempeh":              {cat:"protein", kcal:190, p:19,  c:9,  f:11},
+    "Erbsenprotein-Shake": {cat:"protein", kcal:380, p:80,  c:5,  f:5},
+    "Vollkornreis":        {cat:"carb", kcal:350, p:7,  c:72, f:2.5},
+    "Haferflocken":        {cat:"carb", kcal:372, p:13, c:58, f:7},
+    "Süßkartoffel":        {cat:"carb", kcal:86,  p:1.6,c:20, f:0.1},
+    "Vollkornnudeln":      {cat:"carb", kcal:348, p:13, c:63, f:2.5},
+    "Kartoffeln":          {cat:"carb", kcal:77,  p:2,  c:17, f:0.1},
+    "Quinoa":              {cat:"carb", kcal:368, p:14, c:64, f:6},
+    "Olivenöl":            {cat:"fat", kcal:884, p:0,  c:0,  f:100},
+    "Avocado":             {cat:"fat", kcal:160, p:2,  c:9,  f:15},
+    "Mandeln":             {cat:"fat", kcal:579, p:21, c:22, f:50},
+    "Erdnussbutter":       {cat:"fat", kcal:588, p:25, c:20, f:50},
+    "Walnüsse":            {cat:"fat", kcal:654, p:15, c:14, f:65},
+    "Cashewmus":           {cat:"fat", kcal:553, p:18, c:26, f:44},
+    "Brokkoli":            {cat:"veg", kcal:34, p:2.8, c:7,  f:0.4},
+    "Gemischter Salat":    {cat:"veg", kcal:15, p:1.4, c:2.9,f:0.2},
+    "Paprika":             {cat:"veg", kcal:31, p:1,   c:6,  f:0.3},
+    "Spinat":              {cat:"veg", kcal:23, p:2.9, c:3.6,f:0.4}
+  };
+  var FOOD_LIB = {
+    omnivor:{
+      protein:["Hähnchenbrust","Magerquark","Eier","Lachs","Mageres Rinderhack"],
+      carb:["Vollkornreis","Haferflocken","Süßkartoffel","Vollkornnudeln","Kartoffeln"],
+      fat:["Olivenöl","Avocado","Mandeln","Erdnussbutter"],
+      veg:["Brokkoli","Gemischter Salat","Paprika","Spinat"]
+    },
+    vegetarisch:{
+      protein:["Magerquark","Eier","Linsen","Kichererbsen","Skyr"],
+      carb:["Vollkornreis","Haferflocken","Süßkartoffel","Vollkornnudeln","Quinoa"],
+      fat:["Olivenöl","Avocado","Mandeln","Walnüsse"],
+      veg:["Brokkoli","Gemischter Salat","Paprika","Spinat"]
+    },
+    vegan:{
+      protein:["Tofu","Linsen","Kichererbsen","Tempeh","Erbsenprotein-Shake"],
+      carb:["Vollkornreis","Haferflocken","Süßkartoffel","Quinoa","Vollkornnudeln"],
+      fat:["Olivenöl","Avocado","Mandeln","Cashewmus"],
+      veg:["Brokkoli","Gemischter Salat","Paprika","Spinat"]
+    }
+  };
+
+  function foodGramsForMacro(name, macroKey, targetGrams){
+    var f = FOOD_DB[name];
+    if(!f || !f[macroKey] || f[macroKey] <= 0 || !(targetGrams > 0)){ return null; }
+    return Math.round((targetGrams / f[macroKey]) * 100);
+  }
+
+  /* ---------- Renn-Tag-Fueling ---------- */
+  // Richtwerte aus gängiger Sporternährungsliteratur (u. a. Positionspapiere zu Kohlenhydratzufuhr im Ausdauersport):
+  // längere/intensivere Belastung → höhere stündliche Kohlenhydratmenge, da mehr als ein Transportweg (Glukose+Fruktose) genutzt wird.
+  var RACE_SPLIT = {
+    sprint:        {swim:0.15, bike:0.55, run:0.30},
+    olympic:       {swim:0.12, bike:0.55, run:0.33},
+    mitteldistanz: {swim:0.08, bike:0.54, run:0.38},
+    langdistanz:   {swim:0.06, bike:0.56, run:0.38}
+  };
+  var CARB_RATE = {
+    sprint:        {bike:45, run:30},
+    olympic:       {bike:65, run:45},
+    mitteldistanz: {bike:85, run:65},
+    langdistanz:   {bike:90, run:70}
+  };
+  var RACE_TIME_DEFAULT_H = {
+    sprint:        {einsteiger:1.6, fortgeschritten:1.3, erfahren:1.1},
+    olympic:       {einsteiger:3.2, fortgeschritten:2.7, erfahren:2.3},
+    mitteldistanz: {einsteiger:7.0, fortgeschritten:6.0, erfahren:5.2},
+    langdistanz:   {einsteiger:14.0,fortgeschritten:12.0,erfahren:10.5}
+  };
+  var FLUID_ML_PER_H = 650;
+  var SODIUM_MG_PER_H = 600;
+
+  function computeFueling(cfg, totalHours){
+    var split = RACE_SPLIT[cfg.distance];
+    var rate = CARB_RATE[cfg.distance];
+    var bikeHours = totalHours * split.bike;
+    var runHours = totalHours * split.run;
+    var swimHours = totalHours * split.swim;
+    var carbsBike = bikeHours * rate.bike;
+    var carbsRun = runHours * rate.run;
+    var totalCarbs = Math.round(carbsBike + carbsRun);
+    var fuelHours = bikeHours + runHours;
+    var fluidMl = Math.round(fuelHours * FLUID_ML_PER_H);
+    var sodiumMg = Math.round(fuelHours * SODIUM_MG_PER_H);
+    return {
+      swimHours:swimHours, bikeHours:bikeHours, runHours:runHours,
+      carbsBikePerH: rate.bike, carbsRunPerH: rate.run, totalCarbs:totalCarbs,
+      fluidMl:fluidMl, sodiumMg:sodiumMg
+    };
+  }
+
+  function renderFueling(fuel, cfg, totalHours){
+    var html = '<div class="card"><h2>Bedarf während des Rennens (' + DISTANCE_LABEL[cfg.distance] + ', ~' + fmtHM(Math.round(totalHours*60)) + ')</h2>';
+    html += '<table class="phase-table"><tbody>';
+    html += '<tr><td>Schwimmen</td><td class="mono">~' + fmtHM(Math.round(fuel.swimHours*60)) + ' — keine Zufuhr möglich</td></tr>';
+    html += '<tr><td>Rad</td><td class="mono">~' + fmtHM(Math.round(fuel.bikeHours*60)) + ' · ' + fuel.carbsBikePerH + ' g Kohlenhydrate/h</td></tr>';
+    html += '<tr><td>Laufen</td><td class="mono">~' + fmtHM(Math.round(fuel.runHours*60)) + ' · ' + fuel.carbsRunPerH + ' g Kohlenhydrate/h</td></tr>';
+    html += '</tbody></table></div>';
+    html += '<div class="summary-strip">';
+    html += summaryChip("Kohlenhydrate gesamt", fuel.totalCarbs + " g", "var(--nutri)");
+    html += summaryChip("Flüssigkeit", Math.round(fuel.fluidMl/100)/10 + " l", "var(--swim)");
+    html += summaryChip("Natrium", fuel.sodiumMg + " mg/h", "var(--bike)");
+    html += '</div>';
+    html += '<div class="disclaimer">Richtwerte aus der Sporternährungsliteratur für Ausdauerwettkämpfe (Kohlenhydrate höher bei längerer Renndauer, da der Darm bei Kombination aus Glukose und Fruktose mehr aufnehmen kann). Flüssigkeits- und Natriumbedarf hängen stark von Temperatur, Schweißrate und individueller Veranlagung ab — die hier gezeigten Werte sind grobe Startpunkte, keine individuelle Beratung. Unbedingt vor dem Wettkampf in langen Trainingseinheiten testen ("Darm trainieren") statt es erstmals am Renntag auszuprobieren.</div>';
+    return html;
+  }
+
+  function suggestFuelTime(){
+    var cfg = readTrainingConfig();
+    var defaults = RACE_TIME_DEFAULT_H[cfg.distance];
+    var h = defaults ? defaults[cfg.level] : 3;
+    document.getElementById("fuelHours").value = Math.floor(h);
+    document.getElementById("fuelMinutes").value = Math.round((h - Math.floor(h)) * 60);
+    document.getElementById("fuelDistanceLabel").textContent = DISTANCE_LABEL[cfg.distance];
+  }
+
+  document.getElementById("fuelSuggestTime").addEventListener("click", suggestFuelTime);
+
+  document.getElementById("genFueling").addEventListener("click", function(){
+    var cfg = readTrainingConfig();
+    document.getElementById("fuelDistanceLabel").textContent = DISTANCE_LABEL[cfg.distance];
+    var h = parseInt(document.getElementById("fuelHours").value, 10) || 0;
+    var m = parseInt(document.getElementById("fuelMinutes").value, 10) || 0;
+    var totalHours = h + m/60;
+    if(totalHours <= 0){
+      document.getElementById("fuelingResults").innerHTML = '<div class="disclaimer warn">Bitte eine Zielzeit größer als 0 angeben.</div>';
+      return;
+    }
+    var fuel = computeFueling(cfg, totalHours);
+    document.getElementById("fuelingResults").innerHTML = renderFueling(fuel, cfg, totalHours);
+  });
+
+  document.querySelectorAll('input[name="macroMode"]').forEach(function(r){
+    r.addEventListener("change", function(){
+      var isPercent = val("macroMode") === "percent";
+      document.getElementById("percentBlock").style.display = isPercent ? "" : "none";
+      document.getElementById("gramsBlock").style.display = isPercent ? "none" : "";
+    });
+  });
+
+  function computeNutritionPlan(cfg){
+    var pG, cG, fG, warn = null;
+    if(cfg.macroMode === "percent"){
+      var preset = MACRO_PRESETS[cfg.macroPreset];
+      pG = Math.round(cfg.kcalTarget * preset.p / 100 / 4);
+      cG = Math.round(cfg.kcalTarget * preset.c / 100 / 4);
+      fG = Math.round(cfg.kcalTarget * preset.f / 100 / 9);
+    } else {
+      pG = cfg.gProtein; cG = cfg.gCarbs; fG = cfg.gFat;
+      var computedKcal = pG*4 + cG*4 + fG*9;
+      var deltaPct = ((computedKcal - cfg.kcalTarget) / cfg.kcalTarget) * 100;
+      if(Math.abs(deltaPct) > 5){
+        warn = "Deine Gramm-Angaben ergeben " + computedKcal + " kcal — das weicht " +
+          (deltaPct>0?"+":"") + Math.round(deltaPct) + "% vom Kalorienziel (" + cfg.kcalTarget + " kcal) ab.";
+      }
+    }
+
+    var meals = [];
+    var n = cfg.mealsCount;
+    var lib = FOOD_LIB[cfg.dietStyle];
+    var pPer = Math.floor(pG/n), cPer = Math.floor(cG/n), fPer = Math.floor(fG/n);
+    for(var i=0;i<n;i++){
+      var isLast = (i === n-1);
+      var mp = isLast ? (pG - pPer*(n-1)) : pPer;
+      var mc = isLast ? (cG - cPer*(n-1)) : cPer;
+      var mf = isLast ? (fG - fPer*(n-1)) : fPer;
+      var mkcal = mp*4 + mc*4 + mf*9;
+      var idx = i % lib.protein.length;
+      var proteinName = lib.protein[idx], carbName = lib.carb[idx], fatName = lib.fat[idx], vegName = lib.veg[idx % lib.veg.length];
+      var pGrams = foodGramsForMacro(proteinName, "p", mp);
+      var cGrams = foodGramsForMacro(carbName, "c", mc);
+      var fGrams = foodGramsForMacro(fatName, "f", mf);
+      var parts = [];
+      parts.push((pGrams != null ? pGrams + " g " : "") + proteinName);
+      parts.push((cGrams != null ? cGrams + " g " : "") + carbName + " (roh/trocken)");
+      if(fGrams != null && fGrams >= 3){ parts.push(fGrams + " g " + fatName); }
+      parts.push(vegName);
+      meals.push({
+        name: "Mahlzeit " + (i+1),
+        kcal: mkcal, p:mp, c:mc, f:mf,
+        example: parts.join(" · ")
+      });
+    }
+
+    return {pG:pG, cG:cG, fG:fG, totalKcal: pG*4+cG*4+fG*9, meals:meals, warn:warn};
+  }
+
+  function proteinCarbFeedback(pG, cG, weight){
+    if(!weight){ return ""; }
+    var pPerKg = Math.round((pG/weight)*10)/10;
+    var cPerKg = Math.round((cG/weight)*10)/10;
+    var pNote = (pPerKg < 1.2) ? "eher niedrig für Ausdauersport (üblich: 1.2–2.0 g/kg)" :
+                (pPerKg > 2.0 ? "über dem üblichen Bereich (1.2–2.0 g/kg)" : "im üblichen Bereich (1.2–2.0 g/kg)");
+    var cNote = (cPerKg < 6) ? "eher niedrig bei hohem Trainingsumfang (üblich: 6–10 g/kg)" :
+                (cPerKg > 10 ? "über dem üblichen Bereich (6–10 g/kg)" : "im üblichen Bereich (6–10 g/kg)");
+    return '<div class="disclaimer">Bezogen auf dein Profilgewicht (' + weight + ' kg): ' + pPerKg + ' g/kg Protein (' + pNote +
+      '), ' + cPerKg + ' g/kg Kohlenhydrate (' + cNote + '). Richtwerte für Ausdauersportler, keine individuelle Beratung.</div>';
+  }
+
+  function carbPeriodizationHTML(weight, weeklyMinutes){
+    if(!weight || weeklyMinutes == null){ return ""; }
+    var avgDailyH = weeklyMinutes/7/60;
+    var band;
+    if(avgDailyH < 1){ band = {lo:3, hi:5, label:"niedriges Trainingsvolumen"}; }
+    else if(avgDailyH < 3){ band = {lo:5, hi:7, label:"moderates Trainingsvolumen"}; }
+    else { band = {lo:6, hi:10, label:"hohes Trainingsvolumen (u. a. Ironman-Aufbau)"}; }
+    var trainLo = Math.round(band.lo*weight), trainHi = Math.round(band.hi*weight);
+    var restLo = Math.round(3*weight), restHi = Math.round(4*weight);
+    return '<div class="card"><h2>Kohlenhydrat-Periodisierung (Tagesbedarf)</h2>' +
+      '<p class="hint" style="margin-bottom:10px;">Basierend auf deinem aktuell geplanten Wochenumfang (' + band.label + '):</p>' +
+      '<table class="phase-table"><tbody>' +
+      '<tr><td>Intensiver Trainingstag</td><td class="mono">' + band.lo + '–' + band.hi + ' g/kg → ~' + trainLo + '–' + trainHi + ' g</td></tr>' +
+      '<tr><td>Ruhe-/lockerer Tag</td><td class="mono">3–4 g/kg → ~' + restLo + '–' + restHi + ' g</td></tr>' +
+      '</tbody></table></div>' +
+      '<div class="disclaimer">Kohlenhydrate an den Tagesbedarf anzupassen (mehr an intensiven/langen Trainingstagen, weniger an Ruhetagen) ist eine gängige Strategie im Ausdauersport, um Training und Erholung besser zu unterstützen. Das oben eingestellte Kalorien-/Makroziel bleibt dein fixer Tagesdurchschnitt — nutze diese Spanne als Orientierung, wenn du an einzelnen Tagen bewusst nach oben oder unten anpassen willst.</div>';
+  }
+
+  function renderNutritionPlan(plan, cfg, profile){
+    var html = "";
+    html += '<div class="summary-strip">';
+    html += summaryChip("Ziel", cfg.kcalTarget + " kcal", "var(--nutri)");
+    html += summaryChip("Protein", plan.pG + " g", "var(--nutri)");
+    html += summaryChip("Kohlenhydrate", plan.cG + " g", "var(--bike)");
+    html += summaryChip("Fett", plan.fG + " g", "var(--strength)");
+    html += '</div>';
+
+    var macroKcal = {p: plan.pG*4, c: plan.cG*4, f: plan.fG*9};
+    var macroSegments = [
+      {label:"Protein", value: macroKcal.p, valueLabel: plan.pG + " g", color:"var(--nutri)"},
+      {label:"Fett", value: macroKcal.f, valueLabel: plan.fG + " g", color:"var(--strength)"},
+      {label:"Kohlenhydrate", value: macroKcal.c, valueLabel: plan.cG + " g", color:"var(--bike)"}
+    ];
+    html += '<div class="card"><h2>Makro-Verteilung</h2>' +
+      stackedBarChart(macroSegments, "Makronährstoff-Verteilung nach Kalorienanteil, gesamt " + plan.totalKcal + " kcal") + '</div>';
+
+    html += '<div class="card"><table class="plan-table"><thead><tr>' +
+      '<th>Mahlzeit</th><th>kcal</th><th>P / C / F (g)</th><th>Beispiel</th></tr></thead><tbody>';
+    plan.meals.forEach(function(m){
+      html += '<tr><td>' + m.name + '</td><td class="mono">' + m.kcal + '</td>' +
+        '<td class="mono">' + m.p + ' / ' + m.c + ' / ' + m.f + '</td>' +
+        '<td>' + m.example + '</td></tr>';
+    });
+    html += '<tr class="totals-row"><td>Gesamt</td><td class="mono">' + plan.totalKcal + '</td>' +
+      '<td class="mono">' + plan.pG + ' / ' + plan.cG + ' / ' + plan.fG + '</td><td></td></tr>';
+    html += '</tbody></table></div>';
+
+    if(plan.warn){
+      html += '<div class="disclaimer warn">' + plan.warn + '</div>';
+    }
+    html += proteinCarbFeedback(plan.pG, plan.cG, profile && profile.weight);
+    html += carbPeriodizationHTML(profile && profile.weight, lastWeeklyMinutes);
+    html += '<div class="disclaimer">Vorlage auf Basis deiner Eingaben. Essensvorschläge sind Beispiele je Makro-Kategorie mit Gramm-Angaben aus der Lebensmittel-Datenbank unten (Werte für Rohzustand bzw. Trockenprodukt) — die Menge deckt jeweils nur das eine Makro der Kategorie ab (z. B. Reis liefert auch etwas Protein), keine individuelle Ernährungsberatung. Bei besonderen gesundheitlichen Anforderungen bitte fachlich abklären.</div>';
+
+    document.getElementById("nutritionResults").innerHTML = html;
+  }
+
+  function readNutritionConfig(){
+    return {
+      kcalTarget: parseInt(document.getElementById("kcalTarget").value, 10) || 0,
+      macroMode: val("macroMode"),
+      macroPreset: val("macroPreset"),
+      gProtein: parseInt(document.getElementById("gProtein").value, 10) || 0,
+      gCarbs: parseInt(document.getElementById("gCarbs").value, 10) || 0,
+      gFat: parseInt(document.getElementById("gFat").value, 10) || 0,
+      mealsCount: parseInt(document.getElementById("mealsCount").value, 10),
+      dietStyle: val("dietStyle")
+    };
+  }
+
+  document.getElementById("estimateKcal").addEventListener("click", function(){
+    var profile = readProfile();
+    var bmrResult = computeBMR(profile);
+    var hint = document.getElementById("estimateKcalHint");
+    if(!bmrResult){
+      hint.textContent = "Dafür fehlen noch Angaben im Profil-Tab: entweder Gewicht + Körperfettanteil, oder Gewicht + Größe + Alter.";
+      return;
+    }
+    var factor = activityFactorFromMinutes(lastWeeklyMinutes);
+    var tdee = Math.round(bmrResult.bmr * factor);
+    document.getElementById("kcalTarget").value = tdee;
+    hint.textContent = "≈ " + tdee + " kcal/Tag übernommen (" + bmrResult.method + ", Trainingsannahme: " +
+      (lastWeeklyMinutes != null ? fmtHM(lastWeeklyMinutes) + "/Woche" : "keine Planangabe, moderat geschätzt") + "). Feintuning nach Gewichtsverlauf empfohlen.";
+  });
+
+  document.getElementById("genNutrition").addEventListener("click", function(){
+    var cfg = readNutritionConfig();
+    var profile = readProfile();
+    var plan = computeNutritionPlan(cfg);
+    renderNutritionPlan(plan, cfg, profile);
+    document.getElementById("printNutrition").style.display = "";
+    document.getElementById("printHintNutrition").style.display = "";
+    document.getElementById("printMetaNutrition").textContent =
+      cfg.kcalTarget + " kcal · " + cfg.dietStyle + " · erzeugt am " + fmtDate();
+    setState("startbereit_nutrition", cfg);
+  });
+
+  document.getElementById("printTraining").addEventListener("click", function(){ window.print(); });
+  document.getElementById("printNutrition").addEventListener("click", function(){ window.print(); });
+
+  ["bioWeight","bioHeight","bioBodyfat","bioAge","bioRestingHR","bioMaxHR","bioExperience"].forEach(function(id){
+    document.getElementById(id).addEventListener("change", saveProfile);
+  });
+  document.getElementById("bioInjury").addEventListener("change", saveProfile);
+  document.querySelectorAll('input[name="bioSex"]').forEach(function(r){ r.addEventListener("change", saveProfile); });
+  function saveProfile(){ setState("startbereit_profile", readProfile()); }
+
+  ["fuelHours","fuelMinutes"].forEach(function(id){
+    document.getElementById(id).addEventListener("change", function(){
+      setState("startbereit_fueling", {
+        hours: document.getElementById("fuelHours").value,
+        minutes: document.getElementById("fuelMinutes").value
+      });
+    });
+  });
+
+  /* ================= Lebensmittel-Datenbank (Suche) ================= */
+  var FOOD_CAT_LABEL = {protein:"Protein", carb:"Kohlenhydrate", fat:"Fett", veg:"Gemüse"};
+  function foodRowHTML(name){
+    var f = FOOD_DB[name];
+    if(!f){ return ""; }
+    return '<div class="food-row" data-food="' + escAttr(name) + '">' +
+      '<div><div class="food-name">' + name + '</div><div class="food-cat">' + FOOD_CAT_LABEL[f.cat] + '</div></div>' +
+      '<div class="food-macros">' +
+      '<div class="food-macro"><input type="number" class="food-amount" value="100" min="0" step="5"><span class="u">g</span></div>' +
+      '<div class="food-macro"><span class="n food-kcal">' + f.kcal + '</span><span class="u">kcal</span></div>' +
+      '<div class="food-macro"><span class="n food-p">' + f.p + '</span><span class="u">P</span></div>' +
+      '<div class="food-macro"><span class="n food-c">' + f.c + '</span><span class="u">C</span></div>' +
+      '<div class="food-macro"><span class="n food-f">' + f.f + '</span><span class="u">F</span></div>' +
+      '</div></div>';
+  }
+  function renderFoodSearch(query){
+    var q = (query || "").trim().toLowerCase();
+    var names = Object.keys(FOOD_DB).sort(function(a,b){ return a.localeCompare(b, "de"); });
+    if(q){ names = names.filter(function(n){ return n.toLowerCase().indexOf(q) > -1; }); }
+    var out = document.getElementById("foodSearchResults");
+    if(names.length === 0){
+      out.innerHTML = '<div class="food-empty">Keine Treffer für "' + escAttr(query) + '".</div>';
+      return;
+    }
+    out.innerHTML = names.map(foodRowHTML).join("");
+  }
+  document.getElementById("foodSearch").addEventListener("input", function(){
+    renderFoodSearch(this.value);
+  });
+  document.getElementById("foodSearchResults").addEventListener("input", function(e){
+    if(!e.target.classList.contains("food-amount")){ return; }
+    var row = e.target.closest(".food-row");
+    var name = row.getAttribute("data-food");
+    var f = FOOD_DB[name];
+    if(!f){ return; }
+    var grams = parseFloat(e.target.value);
+    var factor = (isFinite(grams) && grams >= 0) ? grams/100 : 0;
+    row.querySelector(".food-kcal").textContent = Math.round(f.kcal * factor);
+    row.querySelector(".food-p").textContent = Math.round(f.p * factor * 10)/10;
+    row.querySelector(".food-c").textContent = Math.round(f.c * factor * 10)/10;
+    row.querySelector(".food-f").textContent = Math.round(f.f * factor * 10)/10;
+  });
+  renderFoodSearch("");
+
+  /* ================= Reset ================= */
+  document.getElementById("resetAll").addEventListener("click", function(){
+    localStorage.removeItem("startbereit_training");
+    localStorage.removeItem("startbereit_nutrition");
+    localStorage.removeItem("startbereit_profile");
+    localStorage.removeItem("startbereit_fueling");
+    location.reload();
+  });
+
+  /* ================= Apply saved state (shared by restore + code import) ================= */
+  function applyTrainingConfig(t){
+    if(!t){ return; }
+    try{
+      document.getElementById("d-"+ (t.distance==="mitteldistanz"?"mittel":t.distance==="langdistanz"?"lang":t.distance)).checked = true;
+      document.getElementById("l-"+t.level).checked = true;
+      document.getElementById("daysPerWeek").value = t.daysPerWeek;
+      document.getElementById("daysPerWeekVal").textContent = t.daysPerWeek;
+      document.getElementById("includeStrength").checked = t.includeStrength;
+      document.getElementById("f-"+t.focus).checked = true;
+      document.getElementById("usePeriodization").checked = !!t.usePeriodization;
+    }catch(e){}
+  }
+  function applyNutritionConfig(n){
+    if(!n){ return; }
+    try{
+      document.getElementById("kcalTarget").value = n.kcalTarget;
+      document.getElementById("mm-"+n.macroMode).checked = true;
+      if(n.macroPreset){ document.getElementById("mp-"+n.macroPreset).checked = true; }
+      document.getElementById("gProtein").value = n.gProtein;
+      document.getElementById("gCarbs").value = n.gCarbs;
+      document.getElementById("gFat").value = n.gFat;
+      document.getElementById("mealsCount").value = n.mealsCount;
+      document.getElementById("ds-"+(n.dietStyle==="omnivor"?"omni":n.dietStyle==="vegetarisch"?"vegi":"vegan")).checked = true;
+      var isPercent = n.macroMode === "percent";
+      document.getElementById("percentBlock").style.display = isPercent ? "" : "none";
+      document.getElementById("gramsBlock").style.display = isPercent ? "none" : "";
+    }catch(e){}
+  }
+  function applyFueling(f){
+    if(!f){ return; }
+    try{
+      document.getElementById("fuelHours").value = f.hours;
+      document.getElementById("fuelMinutes").value = f.minutes;
+    }catch(e){}
+  }
+  function applyProfile(p){
+    if(!p){ return; }
+    try{
+      if(p.weight != null) document.getElementById("bioWeight").value = p.weight;
+      if(p.height != null) document.getElementById("bioHeight").value = p.height;
+      if(p.bodyfat != null) document.getElementById("bioBodyfat").value = p.bodyfat;
+      if(p.age != null) document.getElementById("bioAge").value = p.age;
+      if(p.sex) document.getElementById("bs-"+p.sex).checked = true;
+      if(p.restingHR != null) document.getElementById("bioRestingHR").value = p.restingHR;
+      if(p.maxHR != null) document.getElementById("bioMaxHR").value = p.maxHR;
+      if(p.experienceYears != null) document.getElementById("bioExperience").value = p.experienceYears;
+      document.getElementById("bioInjury").checked = !!p.injury;
+    }catch(e){}
+  }
+
+  /* ================= Profil-Code (Export/Import ohne Konto) ================= */
+  var PROFILE_CODE_PREFIX = "SB1-";
+  function buildProfileCode(){
+    var payload = {
+      v: 1,
+      profile: readProfile(),
+      training: getState("startbereit_training", null),
+      nutrition: getState("startbereit_nutrition", null),
+      fueling: getState("startbereit_fueling", null)
+    };
+    var json = JSON.stringify(payload);
+    var b64 = btoa(unescape(encodeURIComponent(json)));
+    return PROFILE_CODE_PREFIX + b64;
+  }
+  function parseProfileCode(code){
+    code = (code || "").trim();
+    if(code.indexOf(PROFILE_CODE_PREFIX) === 0){ code = code.slice(PROFILE_CODE_PREFIX.length); }
+    var json = decodeURIComponent(escape(atob(code)));
+    var payload = JSON.parse(json);
+    if(!payload || payload.v !== 1){ throw new Error("Unbekanntes Code-Format"); }
+    return payload;
+  }
+  function applyProfileCodePayload(payload){
+    if(payload.training){ setState("startbereit_training", payload.training); }
+    if(payload.nutrition){ setState("startbereit_nutrition", payload.nutrition); }
+    if(payload.fueling){ setState("startbereit_fueling", payload.fueling); }
+    applyTrainingConfig(payload.training);
+    applyNutritionConfig(payload.nutrition);
+    applyFueling(payload.fueling);
+    applyProfile(payload.profile);
+    saveProfile();
+    updateTabLock();
+    document.getElementById("fuelDistanceLabel").textContent = DISTANCE_LABEL[val("distance")];
+  }
+
+  document.getElementById("genProfileCode").addEventListener("click", function(){
+    var code = buildProfileCode();
+    var out = document.getElementById("profileCodeOut");
+    out.value = code;
+    out.style.display = "";
+    document.getElementById("copyProfileCode").style.display = "";
+    document.getElementById("copyProfileCodeHint").textContent = "Code erzeugt (" + Math.round(code.length/1024*10)/10 + " KB). Kopieren und auf dem anderen Gerät einfügen.";
+  });
+
+  document.getElementById("copyProfileCode").addEventListener("click", function(){
+    var out = document.getElementById("profileCodeOut");
+    var hint = document.getElementById("copyProfileCodeHint");
+    out.select();
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(out.value).then(function(){
+        hint.textContent = "In die Zwischenablage kopiert.";
+      }).catch(function(){
+        hint.textContent = "Kopieren nicht möglich — Text ist markiert, bitte manuell kopieren (Strg/Cmd+C).";
+      });
+    } else {
+      hint.textContent = "Text ist markiert, bitte manuell kopieren (Strg/Cmd+C).";
+    }
+  });
+
+  document.getElementById("applyProfileCode").addEventListener("click", function(){
+    var hint = document.getElementById("applyProfileCodeHint");
+    var raw = document.getElementById("profileCodeIn").value;
+    if(!raw || !raw.trim()){
+      hint.textContent = "Bitte zuerst einen Code einfügen.";
+      return;
+    }
+    try{
+      var payload = parseProfileCode(raw);
+      applyProfileCodePayload(payload);
+      hint.textContent = "Übernommen. Dein Profil, Trainings- und Ernährungsplan sind jetzt auf diesem Gerät aktiv.";
+    }catch(e){
+      hint.textContent = "Dieser Code konnte nicht gelesen werden — bitte prüfen, ob er vollständig eingefügt wurde.";
+    }
+  });
+
+  /* ================= Restore last session ================= */
+  (function restore(){
+    var t = getState("startbereit_training", null);
+    applyTrainingConfig(t);
+    var n = getState("startbereit_nutrition", null);
+    applyNutritionConfig(n);
+    var f = getState("startbereit_fueling", null);
+    applyFueling(f);
+    var p = getState("startbereit_profile", null);
+    applyProfile(p);
+    var wasComplete = updateTabLock();
+    if(wasComplete && (t || n)){ switchTab("training"); }
+    document.getElementById("fuelDistanceLabel").textContent = DISTANCE_LABEL[val("distance")];
+  })();
+
+})();
+</script>
+
+</body>
+</html>
