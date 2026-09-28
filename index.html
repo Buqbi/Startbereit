@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1517">
 <meta name="robots" content="noindex">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Startbereit">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Startbereit</title>
 </head>
 <body>
@@ -364,6 +370,53 @@
   .food-amount{width:64px;flex:none;text-align:right;padding:6px 8px !important;font-size:13px !important;}
   .food-empty{color:var(--text-dim);font-size:13px;padding:8px 0;}
 
+  /* ---------- Einheiten-Details & Workout-Player ---------- */
+  .wk-open{margin-top:6px;background:transparent;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px 12px;font-size:13px;font-weight:700;cursor:pointer;min-height:40px;}
+  .wk-open:active{background:var(--surface-2);}
+  .sheet{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;}
+  .sheet-panel{background:var(--surface);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:16px 16px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));border:1px solid var(--line);}
+  .sheet-head{border-left:4px solid var(--line);padding-left:12px;margin-bottom:12px;}
+  .sheet-head h3{margin:2px 0 0;font-size:22px;}
+  .sheet-disc{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;}
+  .why{font-size:14px;background:var(--surface-2);border-radius:8px;padding:12px;margin-bottom:14px;line-height:1.5;}
+  .wk-steps{list-style:none;margin:0;padding:0;}
+  .wk-block{border:1px solid var(--line);border-radius:10px;padding:4px 12px;margin-bottom:10px;}
+  .wk-reps{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--text);padding:8px 0 2px;}
+  .wk-step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);}
+  .wk-step:last-child{border-bottom:none;}
+  .wk-amt{flex:none;width:78px;font-weight:800;font-size:15px;}
+  .wk-body{flex:1;min-width:0;}
+  .wk-label{font-weight:700;font-size:14px;}
+  .wk-target{font-size:15px;font-weight:800;margin-top:2px;}
+  .wk-sec, .wk-note{font-size:12px;color:var(--text-dim);margin-top:2px;}
+  .k-rest .wk-label, .k-rest .wk-amt{color:var(--text-dim);font-weight:600;}
+  .player{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;flex-direction:column;overflow:auto;
+    padding:calc(14px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));text-align:center;}
+  .pl-top{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--text-dim);text-align:left;}
+  .pl-progress{height:4px;background:var(--surface-2);border-radius:2px;margin:10px 0 18px;overflow:hidden;}
+  .pl-progress div{height:100%;}
+  .pl-kind{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);}
+  .pl-kind.k-work{color:var(--run);} .pl-kind.k-drill{color:var(--swim);}
+  .pl-label{font-size:clamp(22px,6vw,30px);font-weight:800;margin:6px 0 2px;}
+  .pl-amount{font-size:16px;color:var(--text-dim);}
+  .pl-clock{font-size:clamp(72px,24vw,132px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.02em;}
+  .pl-sub{font-size:13px;color:var(--text-dim);}
+  .pl-stepbar{height:6px;background:var(--surface-2);border-radius:3px;margin:12px auto 0;max-width:420px;width:100%;overflow:hidden;}
+  .pl-stepbar div{height:100%;width:0;}
+  .pl-target{font-size:clamp(22px,6.5vw,30px);font-weight:800;margin-top:18px;}
+  .pl-sec{font-size:13px;color:var(--text-dim);margin-top:4px;}
+  .pl-note{font-size:14px;margin:12px auto 0;max-width:420px;background:var(--surface);border-radius:8px;padding:10px 12px;}
+  .pl-next{font-size:13px;color:var(--text-dim);margin-top:auto;padding-top:18px;}
+  .pl-buttons{display:flex;gap:10px;margin-top:12px;}
+  .pl-btn{flex:none;width:64px;min-height:64px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:26px;font-weight:800;cursor:pointer;}
+  .pl-btn.pl-main{flex:1;width:auto;background:var(--nutri);border-color:var(--nutri);color:#0F1517;font-size:20px;}
+  .pl-footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px;color:var(--text-dim);}
+  .pl-voice{display:flex;align-items:center;gap:8px;}
+  .pl-voice input{width:20px;height:20px;accent-color:var(--nutri);}
+  .pl-end{background:transparent;border:none;color:var(--text-dim);text-decoration:underline;font-size:13px;padding:10px 0;cursor:pointer;}
+  .pl-done{max-width:520px;margin:0 auto;width:100%;padding-top:20px;}
+  @media print{ .wk-open, .sheet, .player{display:none !important;} }
+
   /* ---------- Print / PDF-Export ---------- */
   .print-header{display:none;}
   .btn-print{
@@ -456,6 +509,28 @@
         <input type="number" id="bioExperience" min="0" max="60" step="0.5" placeholder="z. B. 2">
         <div class="hint">Schlägt beim ersten Durchlauf ein passendes Erfahrungslevel im Training-Tab vor — dort jederzeit änderbar.</div>
       </div>
+    </div>
+
+    <div class="card">
+      <h2>Leistungswerte (optional)</h2>
+      <p class="hint" style="margin-bottom:14px;">Alles freiwillig. Je mehr du angibst, desto konkreter werden die Vorgaben in den Einheiten (Pace, Watt, Schwimmzeiten). Ohne Werte steuert die App über Puls bzw. Gefühl (RPE). Zeiten als <span class="mono">mm:ss</span>.</p>
+      <span class="title">Laufen</span>
+      <div class="row2">
+        <div class="field"><label class="hint" for="bioRun5k">5-km-Zeit</label><input type="text" id="bioRun5k" placeholder="z. B. 24:30" autocomplete="off"></div>
+        <div class="field"><label class="hint" for="bioRun10k">10-km-Zeit</label><input type="text" id="bioRun10k" placeholder="z. B. 51:00" autocomplete="off"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label class="hint" for="bioRunThr">Schwellenpace (/km)</label><input type="text" id="bioRunThr" placeholder="falls bekannt" autocomplete="off"></div>
+        <div class="field"><label class="hint" for="bioLTHR">Schwellen-Puls (bpm)</label><input type="number" id="bioLTHR" min="100" max="220" step="1" placeholder="falls bekannt"></div>
+      </div>
+      <span class="title">Rad</span>
+      <div class="field"><label class="hint" for="bioFTP">FTP (Watt)</label><input type="number" id="bioFTP" min="50" max="600" step="1" placeholder="nur mit Wattmessung/Smarttrainer"></div>
+      <span class="title">Schwimmen</span>
+      <div class="row2">
+        <div class="field"><label class="hint" for="bioSwimCss">CSS (/100 m)</label><input type="text" id="bioSwimCss" placeholder="z. B. 1:55" autocomplete="off"></div>
+        <div class="field"><label class="hint" for="bioSwim400">400-m-Zeit</label><input type="text" id="bioSwim400" placeholder="z. B. 8:00" autocomplete="off"></div>
+      </div>
+      <div class="hint" id="perfPreview" style="margin-top:0;"></div>
     </div>
 
     <div class="card">
@@ -648,6 +723,9 @@
 
   <button class="btn-secondary" id="resetAll">Alle Eingaben zurücksetzen</button>
 
+  <div class="sheet" id="wkSheet" role="dialog" aria-modal="true" aria-label="Trainingseinheit"><div class="sheet-panel" id="wkSheetBody"></div></div>
+  <div class="player" id="wkPlayer" role="dialog" aria-modal="true" aria-label="Workout-Player"></div>
+
   <footer>Vorlagen-Generator · ersetzt keine individuelle sportmedizinische oder ernährungsfachliche Beratung.</footer>
 </div>
 
@@ -706,6 +784,10 @@
       var v = document.getElementById(id).value;
       return v === "" ? null : parseFloat(v);
     }
+    function strOrNull(id){
+      var v = document.getElementById(id).value.trim();
+      return v === "" ? null : v;
+    }
     return {
       weight: numOrNull("bioWeight"),
       height: numOrNull("bioHeight"),
@@ -715,7 +797,14 @@
       restingHR: numOrNull("bioRestingHR"),
       maxHR: numOrNull("bioMaxHR"),
       experienceYears: numOrNull("bioExperience"),
-      injury: document.getElementById("bioInjury").checked
+      injury: document.getElementById("bioInjury").checked,
+      run5k: strOrNull("bioRun5k"),
+      run10k: strOrNull("bioRun10k"),
+      runThrPace: strOrNull("bioRunThr"),
+      lthr: numOrNull("bioLTHR"),
+      ftp: numOrNull("bioFTP"),
+      swimCss: strOrNull("bioSwimCss"),
+      swim400: strOrNull("bioSwim400")
     };
   }
 
@@ -838,12 +927,12 @@
   };
 
   var SESSION_TEMPLATE = [
-    {day:"Dienstag",   disc:"swim", label:"Technik & Kraulschule",      base:30, priority:5, long:false, intensity:"easy", zone:"Zone 1–2"},
-    {day:"Mittwoch",   disc:"bike", label:"Tempo-Intervalle",           base:45, priority:3, long:false, intensity:"hard", zone:"Zone 3–4"},
-    {day:"Donnerstag", disc:"swim", label:"Ausdauereinheit",            base:40, priority:4, long:false, intensity:"easy", zone:"Zone 2"},
-    {day:"Freitag",    disc:"run",  label:"Lauf-Intervalle",            base:30, priority:2, long:false, intensity:"hard", zone:"Zone 4–5"},
-    {day:"Samstag",    disc:"bike", label:"Lange Grundlageneinheit",    base:75, priority:1, long:true,  intensity:"easy", zone:"Zone 2"},
-    {day:"Sonntag",    disc:"run",  label:"Langer Dauerlauf",           base:45, priority:1, long:true,  intensity:"easy", zone:"Zone 2"}
+    {day:"Dienstag",   disc:"swim", type:"swim_technique", label:"Technik & Kraulschule",      base:30, priority:5, long:false, intensity:"easy", zone:"Zone 1–2"},
+    {day:"Mittwoch",   disc:"bike", type:"bike_tempo", label:"Tempo-Intervalle",           base:45, priority:3, long:false, intensity:"hard", zone:"Zone 3–4"},
+    {day:"Donnerstag", disc:"swim", type:"swim_endurance", label:"Ausdauereinheit",            base:40, priority:4, long:false, intensity:"easy", zone:"Zone 2"},
+    {day:"Freitag",    disc:"run",  type:"run_intervals", label:"Lauf-Intervalle",            base:30, priority:2, long:false, intensity:"hard", zone:"Zone 4–5"},
+    {day:"Samstag",    disc:"bike", type:"bike_long", label:"Lange Grundlageneinheit",    base:75, priority:1, long:true,  intensity:"easy", zone:"Zone 2"},
+    {day:"Sonntag",    disc:"run",  type:"run_long", label:"Langer Dauerlauf",           base:45, priority:1, long:true,  intensity:"easy", zone:"Zone 2"}
   ];
   var INTENSITY_LABEL = {easy:"locker", hard:"intensiv"};
   var DAY_ORDER = ["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
@@ -862,7 +951,7 @@
       var focusBoost = (cfg.focus === s.disc) ? 1.15 : 1;
       var prio = s.priority - (cfg.focus === s.disc ? 2 : 0);
       return {
-        day:s.day, disc:s.disc, label:s.label,
+        day:s.day, disc:s.disc, label:s.label, type:s.type,
         duration: round5(s.base * levelF * factor * focusBoost),
         priority: Math.max(1, prio),
         intensity: s.intensity, zone: s.zone
@@ -892,7 +981,7 @@
       var strengthDays = ["Montag", (byDay["Donnerstag"] && byDay["Donnerstag"].length) ? "Donnerstag" : (keptDays[0] || "Montag")];
       strengthDays.forEach(function(d){
         byDay[d].push({
-          day:d, disc:"strength", label:"Rumpf- und Kraftstabilität",
+          day:d, disc:"strength", type:"strength", label:"Rumpf- und Kraftstabilität",
           duration: round5(30 * levelF)
         });
       });
@@ -937,7 +1026,9 @@
           var zoneTag = s.zone ? ' · ' + s.zone : '';
           html += '<div class="session" style="border-left-color:' + DISC[s.disc].color + '">' +
             '<div class="s-name">' + DISC[s.disc].name + ' — ' + s.label + '</div>' +
-            '<div class="s-meta mono">' + s.duration + ' min' + zoneTag + '</div></div>';
+            '<div class="s-meta mono">' + s.duration + ' min' + zoneTag + '</div>' +
+            (s.type ? '<button type="button" class="wk-open" data-wk-type="' + s.type + '" data-wk-dur="' + s.duration + '" data-wk-phase="' + (plan.phaseKey || "") + '">Ablauf &amp; Start ›</button>' : '') +
+            '</div>';
         });
       }
       html += '</div></div>';
@@ -1069,7 +1160,7 @@
       byDay[d] = basePlan.byDay[d].map(function(s){
         var dur = round5(s.duration * mult);
         totals[s.disc] += dur;
-        return {day:s.day, disc:s.disc, label:s.label, duration:dur, intensity:s.intensity, zone:s.zone};
+        return {day:s.day, disc:s.disc, label:s.label, type:s.type, duration:dur, intensity:s.intensity, zone:s.zone};
       });
     });
     return {byDay:byDay, totals:totals, totalMinutes: totals.swim+totals.bike+totals.run+totals.strength};
@@ -1097,7 +1188,7 @@
           color: phase.color,
           isRecovery: isRecovery,
           isRaceWeek: (phase.key === "taper" && i === count-1),
-          plan: scalePlanSessions(basePlan, mult)
+          plan: (function(pl){ pl.phaseKey = phase.key; return pl; })(scalePlanSessions(basePlan, mult))
         });
       }
     });
@@ -1198,6 +1289,538 @@
       " · erzeugt am " + fmtDate();
     setState("startbereit_training", cfg);
   });
+
+  /* ================= WORKOUT-BIBLIOTHEK ================= */
+  // Zeit-/Pace-Eingaben: "mm:ss", "h:mm:ss" oder nur Minuten ("25")
+  function parseTimeStr(v){
+    if(v == null){ return null; }
+    var t = String(v).trim().replace(/[.,]/g, ":");
+    if(!t){ return null; }
+    var parts = t.split(":");
+    var nums = parts.map(function(x){ return /^\d+$/.test(x) ? parseInt(x, 10) : NaN; });
+    if(nums.some(isNaN)){ return null; }
+    var sec;
+    if(nums.length === 1){ sec = nums[0]*60; }
+    else if(nums.length === 2){ if(nums[1] >= 60){ return null; } sec = nums[0]*60 + nums[1]; }
+    else if(nums.length === 3){ if(nums[1] >= 60 || nums[2] >= 60){ return null; } sec = nums[0]*3600 + nums[1]*60 + nums[2]; }
+    else { return null; }
+    return sec > 0 ? sec : null;
+  }
+  function fmtMinSec(sec){
+    sec = Math.round(sec);
+    var m = Math.floor(sec/60), s = sec % 60;
+    return m + ":" + (s < 10 ? "0" + s : s);
+  }
+  function fmtStepAmount(st){
+    if(st.dist){ return st.dist + " m"; }
+    if(st.sec >= 60 && st.sec % 60 === 0){ return (st.sec/60) + " min"; }
+    if(st.sec >= 60){ return fmtMinSec(st.sec) + " min"; }
+    return st.sec + " s";
+  }
+
+  // Intensitätsstufen mit Faktoren je Steuerungsgröße.
+  // run = Faktor auf Schwellenpace (größer = langsamer), bike = Anteil FTP,
+  // lthr = Anteil Schwellenpuls, hrr = Anteil Herzfrequenzreserve, swim = Sekunden auf CSS/100 m.
+  var LEVELS = {
+    rec:   {name:"Regeneration",           run:[1.35,1.45], bike:[0.45,0.55], lthr:[0.70,0.80], hrr:[0.50,0.60], swim:[15,20], rpe:"2/10 – ganz locker"},
+    easy:  {name:"Locker / Grundlage",     run:[1.20,1.32], bike:[0.56,0.72], lthr:[0.81,0.89], hrr:[0.60,0.72], swim:[8,12],  rpe:"3–4/10 – Unterhaltung gut möglich"},
+    steady:{name:"Zügig / Langdistanz-Tempo", run:[1.10,1.16], bike:[0.76,0.85], lthr:[0.90,0.93], hrr:[0.72,0.80], swim:[4,7],   rpe:"5/10 – ganze Sätze noch möglich"},
+    tempo: {name:"Tempo / Sweet Spot",     run:[1.03,1.07], bike:[0.88,0.93], lthr:[0.94,0.97], hrr:[0.80,0.86], swim:[2,4],   rpe:"6–7/10 – nur noch kurze Sätze"},
+    thr:   {name:"Schwelle",               run:[0.99,1.02], bike:[0.95,1.02], lthr:[0.98,1.02], hrr:[0.86,0.91], swim:[-1,2],  rpe:"7–8/10 – nur einzelne Wörter"},
+    vo2:   {name:"VO2max / hart",          run:[0.90,0.93], bike:[1.06,1.18], lthr:[1.03,1.06], hrr:[0.91,0.97], swim:[-5,-2], rpe:"9/10 – sehr hart"}
+  };
+
+  function perfMetrics(p){
+    var m = {};
+    var thr = parseTimeStr(p.runThrPace), t5 = parseTimeStr(p.run5k), t10 = parseTimeStr(p.run10k);
+    // Schwellenpace ≈ 5-km-Pace × 1,05 bzw. 10-km-Pace × 1,02 (Näherung an Daniels' VDOT-Tabellen)
+    if(thr && thr >= 150 && thr <= 720){ m.runT = thr; m.runSrc = "deiner Schwellenpace"; }
+    else if(t5 && t5 >= 600 && t5 <= 3600){ m.runT = (t5/5)*1.05; m.runSrc = "deiner 5-km-Zeit"; }
+    else if(t10 && t10 >= 1200 && t10 <= 7200){ m.runT = (t10/10)*1.02; m.runSrc = "deiner 10-km-Zeit"; }
+    if(p.ftp && p.ftp >= 50){ m.ftp = p.ftp; }
+    var css = parseTimeStr(p.swimCss), t400 = parseTimeStr(p.swim400);
+    // CSS ≈ 400-m-Durchschnitt pro 100 m + 4 s (CSS ist das über ~30 min haltbare Tempo)
+    if(css && css >= 50 && css <= 300){ m.css = css; m.swimSrc = "deiner CSS"; }
+    else if(t400 && t400 >= 200 && t400 <= 1200){ m.css = t400/4 + 4; m.swimSrc = "deiner 400-m-Zeit"; }
+    if(p.lthr && p.lthr >= 100){ m.lthr = p.lthr; }
+    var hm = getHRMax(p);
+    if(hm){ m.hrmax = hm.value; }
+    if(p.restingHR){ m.rhr = p.restingHR; }
+    return m;
+  }
+
+  function hrRange(level, m){
+    var L = LEVELS[level];
+    if(m.lthr){ return Math.round(m.lthr*L.lthr[0]) + "–" + Math.round(m.lthr*L.lthr[1]) + " bpm"; }
+    if(!m.hrmax){ return null; }
+    var lo, hi;
+    if(m.rhr){
+      lo = m.rhr + (m.hrmax - m.rhr)*L.hrr[0]; hi = m.rhr + (m.hrmax - m.rhr)*L.hrr[1];
+    } else {
+      // %HFR → %HFmax (Näherung nach Swain): %HFmax ≈ 0,64·%HFR + 0,37
+      lo = m.hrmax*(0.64*L.hrr[0] + 0.37); hi = m.hrmax*(0.64*L.hrr[1] + 0.37);
+    }
+    return Math.round(lo) + "–" + Math.round(hi) + " bpm";
+  }
+
+  // Zielwert nach Hierarchie: Rad FTP → Puls → RPE, Laufen Pace → Puls → RPE, Schwimmen CSS → RPE
+  function targetFor(disc, level, m){
+    var L = LEVELS[level];
+    if(!L){ return {primary:"", secondary:""}; }
+    var primary = null, extra = [];
+    var hr = (disc === "swim") ? null : hrRange(level, m);
+    if(disc === "run" && m.runT){ primary = fmtMinSec(m.runT*L.run[0]) + "–" + fmtMinSec(m.runT*L.run[1]) + " /km"; }
+    if(disc === "bike" && m.ftp){ primary = Math.round(m.ftp*L.bike[0]) + "–" + Math.round(m.ftp*L.bike[1]) + " W"; extra.push(Math.round(L.bike[0]*100) + "–" + Math.round(L.bike[1]*100) + " % FTP"); }
+    if(disc === "swim" && m.css){ primary = fmtMinSec(m.css + L.swim[0]) + "–" + fmtMinSec(m.css + L.swim[1]) + " /100 m"; }
+    if(!primary && hr){ primary = hr; hr = null; }
+    if(hr){ extra.push(hr); }
+    if(!primary){ return {primary: "RPE " + L.rpe, secondary: L.name}; }
+    extra.push("RPE " + L.rpe);
+    return {primary: primary, secondary: extra.join(" · ")};
+  }
+
+  function targetSourceNote(disc, m){
+    if(disc === "run"){ return m.runT ? "Pace berechnet aus " + m.runSrc + "." : (m.lthr || m.hrmax ? "Keine Laufzeit im Profil – Steuerung über Puls. Mit 5-km-Zeit im Profil bekommst du konkrete Pace-Vorgaben." : "Keine Leistungswerte im Profil – Steuerung nach Gefühl (RPE)."); }
+    if(disc === "bike"){ return m.ftp ? "Watt berechnet aus deiner FTP." : (m.lthr || m.hrmax ? "Keine FTP im Profil – Steuerung über Puls (am Rad meist ~5 Schläge niedriger als beim Laufen)." : "Keine Leistungswerte im Profil – Steuerung nach Gefühl (RPE)."); }
+    if(disc === "swim"){ return m.css ? "Zeiten pro 100 m berechnet aus " + m.swimSrc + "." : "Keine Schwimmzeit im Profil – Steuerung nach Gefühl (RPE). Mit 400-m-Zeit bekommst du konkrete Zeiten pro 100 m."; }
+    return "";
+  }
+
+  var STRENGTH_EX = [
+    {n:"Bulgarische Split-Kniebeuge", d:"je Bein", why:"einbeinige Beinkraft & Stabilität – wie beim Laufen"},
+    {n:"Einbeinige Hüftbrücke", d:"je Bein", why:"Hüftstreckung & Gesäß – Kraftübertragung auf Rad und Lauf"},
+    {n:"Unterarmstütz (Plank)", d:"halten", hold:true, why:"Rumpfstabilität – ruhige Position auf dem Rad"},
+    {n:"Einbeiniges Wadenheben", d:"je Bein, langsam absenken", why:"Wade & Achillessehne belastbar machen"},
+    {n:"Seitstütz", d:"je Seite halten", hold:true, why:"seitliche Rumpfkraft – stabiles Becken beim Laufen"},
+    {n:"Einbeiniges rumänisches Kreuzheben", d:"je Bein", why:"hintere Kette & Gleichgewicht"},
+    {n:"Rudern mit Band oder Kurzhantel", d:"", why:"oberer Rücken – Haltung beim Schwimmen und in Aeroposition"}
+  ];
+  var STRENGTH_DOSE = {
+    grundlage: {sets:3, reps:"12 Wdh.", hold:"40 s"},
+    aufbau:    {sets:3, reps:"8–10 Wdh. (etwas schwerer)", hold:"45 s"},
+    spezifisch:{sets:2, reps:"8 Wdh.", hold:"45 s"},
+    taper:     {sets:1, reps:"6–8 Wdh. locker", hold:"30 s"}
+  };
+
+  // Baut eine strukturierte Einheit. Blöcke: {reps, steps:[{kind,label,level,sec|dist,note,targetText}]}
+  function buildWorkout(type, durMin, phase, profile, cfg){
+    var m = perfMetrics(profile || {});
+    phase = RAMP[phase] ? phase : "aufbau";
+    var D = Math.max(20, Math.round(durMin || 30));
+    var longDist = !!(cfg && (cfg.distance === "mitteldistanz" || cfg.distance === "langdistanz"));
+    var blocks = [];
+    function step(kind, label, level, amount, note){
+      var s = {kind:kind, label:label, level:level};
+      if(amount.sec != null){ s.sec = Math.max(1, Math.round(amount.sec)); }
+      if(amount.dist != null){ s.dist = amount.dist; }
+      if(note){ s.note = note; }
+      return s;
+    }
+    function add(reps, steps){ blocks.push({reps:reps, steps:steps}); }
+    function min(x){ return {sec: Math.round(x)*60}; }
+    var w = {type:type, phase:phase, blocks:blocks, disc:null, title:"", purpose:""};
+
+    function intervalSession(disc, cfgP, wuNote){
+      var WU = D >= 45 ? 15 : 10, CD = D >= 45 ? 10 : 5;
+      var avail = D - WU - CD;
+      var work = cfgP.work;
+      // Bei wenig Zeit: Intervalle verkürzen statt die Einheit zu verlängern (mind. 2 Wiederholungen)
+      if(avail < 2*work + cfgP.rest){ work = Math.max(2, Math.floor((avail - cfgP.rest)/2)); }
+      var unit = work + cfgP.rest;
+      var n = Math.round((avail + cfgP.rest) / unit);
+      n = Math.max(2, Math.min(cfgP.max || 8, n));
+      cfgP = Object.assign({}, cfgP, {work: work});
+      var diff = D - (WU + n*unit - cfgP.rest + CD); // letzte Pause entfällt
+      if(diff < 0){ // zu lang: erst Ausklang, dann Aufwärmen kürzen
+        var cut = Math.min(-diff, CD - 5); CD -= cut; diff += cut;
+        if(diff < 0){ WU = Math.max(8, WU + diff); }
+      } else if(diff > 0){ // Restzeit auf Auf- und Abwärmen verteilen
+        var toWU = Math.min(5, Math.floor(diff/2)); WU += toWU; CD += diff - toWU;
+      }
+      add(1, [step("warmup", disc === "run" ? "Einlaufen" : "Einrollen", "easy", min(WU), wuNote)]);
+      add(n, [
+        step("work", cfgP.workLabel, cfgP.level, min(cfgP.work), cfgP.note),
+        step("rest", cfgP.restLabel || "Lockere Pause", "rec", min(cfgP.rest))
+      ]);
+      if(CD > 12){ // viel Restzeit: als lockere Grundlage statt als endloses Auslaufen
+        add(1, [step("work", disc === "run" ? "Locker weiterlaufen" : "Locker weiterfahren", "easy", min(CD - 10))]);
+        CD = 10;
+      }
+      add(1, [step("cooldown", "Ausklang locker", "rec", min(CD))]);
+    }
+
+    if(type === "run_long" || type === "bike_long"){
+      var isRun = type === "run_long";
+      w.disc = isRun ? "run" : "bike";
+      w.title = isRun ? "Langer Dauerlauf" : "Lange Grundlagenausfahrt";
+      w.purpose = isRun
+        ? "Baut aerobe Ausdauer und Laufökonomie auf – das Fundament für die Laufstrecke im Triathlon. Bewusst locker: Das Tempo darf sich fast zu leicht anfühlen."
+        : "Das Herzstück für die Radausdauer: Fettstoffwechsel, Sitzfleisch, Durchhaltevermögen. Perfekt, um Essen und Trinken auf dem Rad zu üben.";
+      var main = D - 15;
+      add(1, [step("warmup", isRun ? "Einlaufen" : "Einrollen", "rec", min(10))]);
+      if(phase === "spezifisch" && D >= 50){
+        var race = Math.round(main*0.3);
+        add(1, [step("work", "Grundlage", "easy", min(main - race)), step("work", "Wettkampftempo-Block", longDist ? "steady" : "tempo", min(race), "Gleichmäßig, kontrolliert – so fühlt sich das Rennen an")]);
+      } else {
+        add(1, [step("work", "Grundlage gleichmäßig", "easy", min(main), isRun ? "Bergauf lieber langsamer als Puls hochjagen" : "Alle 20–30 min trinken/essen")]);
+      }
+      add(1, [step("cooldown", isRun ? "Auslaufen" : "Ausrollen", "rec", min(5))]);
+    }
+    else if(type === "run_intervals"){
+      w.disc = "run";
+      var RI = {
+        grundlage:{workLabel:"Tempoabschnitt", level:"tempo", work:6, rest:2, max:5, title:"Tempowechsel-Lauf", purpose:"Kontrollierte Tempoabschnitte gewöhnen die Beine an zügiges Laufen, ohne dich müde zu machen – ideal in der Grundlagenphase."},
+        aufbau:   {workLabel:"Schwellenintervall", level:"thr", work:8, rest:2, max:5, restLabel:"Traben", title:"Schwellenintervalle", purpose:"Hebt deine Laktatschwelle: Du kannst später länger schneller laufen. Tempo gleichmäßig – die letzte Wiederholung so schnell wie die erste."},
+        spezifisch: longDist
+          ? {workLabel:"Wettkampftempo", level:"steady", work:12, rest:3, restLabel:"Traben", title:"Wettkampftempo-Läufe", purpose:"Trainiert genau das Tempo, das du nach dem Radfahren im Rennen laufen willst."}
+          : {workLabel:"Hartes Intervall", level:"vo2", work:3, rest:2, restLabel:"Traben", title:"VO2max-Intervalle", purpose:"Kurze, harte Reize für die maximale Sauerstoffaufnahme – bringt Speed für Sprint- und Kurzdistanz."},
+        taper:    {workLabel:"Kurzer Schwellenreiz", level:"thr", work:2, rest:2, restLabel:"Traben", max:4, title:"Aktivierung (Taper)", purpose:"Hält die Beine vor dem Wettkampf spritzig, ohne zu ermüden. Nicht mehr machen als geplant!"}
+      }[phase];
+      w.title = RI.title; w.purpose = RI.purpose;
+      intervalSession("run", RI, "Am Ende 4× 20 s Steigerung auf zügiges Tempo");
+    }
+    else if(type === "bike_tempo"){
+      w.disc = "bike";
+      var BT = {
+        grundlage:{workLabel:"Kraftausdauer-Block", level:"steady", work:12, rest:4, note:"Trittfrequenz ruhig 70–80 U/min, Oberkörper locker", title:"Kraftausdauer am Rad", purpose:"Stärkt die muskuläre Ausdauer bei moderatem Aufwand – gute Basis für spätere, härtere Intervalle."},
+        aufbau:   {workLabel:"Sweet-Spot-Intervall", level:"tempo", work:10, rest:3, max:6, title:"Sweet-Spot-Intervalle", purpose:"Sehr effektiver Reiz für die Radleistung: hart genug für Fortschritt, aber gut erholbar."},
+        spezifisch: longDist
+          ? {workLabel:"Wettkampftempo-Block", level:"steady", work:20, rest:5, max:4, note:"Aeroposition, Verpflegung wie im Rennen üben", title:"Wettkampftempo-Blöcke", purpose:"Trainiert genau die Intensität, die du im Rennen stundenlang halten willst."}
+          : {workLabel:"Schwellenintervall", level:"thr", work:8, rest:4, title:"Schwellenintervalle", purpose:"Verschiebt deine Dauerleistungsgrenze nach oben – direkt spürbar im Wettkampftempo."},
+        taper:    {workLabel:"Kurze Aktivierung", level:"thr", work:5, rest:5, max:3, title:"Aktivierung (Taper)", purpose:"Kurze Reize halten die Spritzigkeit, ohne zu ermüden."}
+      }[phase];
+      w.title = BT.title; w.purpose = BT.purpose;
+      intervalSession("bike", BT, "Langsam steigern, letzte 3 min zügig");
+    }
+    else if(type === "swim_technique" || type === "swim_endurance"){
+      w.disc = "swim";
+      var avg100 = m.css ? m.css + 18 : 150; // Ø pro 100 m inkl. Pausen
+      var total = Math.max(600, Math.round((D*60/avg100)*100/50)*50);
+      function swimSec(dist, level){ return Math.round((m.css ? m.css + LEVELS[level].swim[1] : 150) * dist/100); }
+      function sw(kind, label, level, dist, note){ var s = step(kind, label, level, {dist:dist}, note); s.estSec = swimSec(dist, level); return s; }
+      var rest = function(sec){ return step("rest", "Pause am Beckenrand", "rec", {sec:sec}); };
+      if(type === "swim_technique"){
+        w.title = "Technik & Kraulschule";
+        w.purpose = "Im Schwimmen bringt Technik mehr als Kraft: bessere Wasserlage und längere Züge sparen im Rennen viel Energie.";
+        var drills = total >= 1500 ? 8 : 6;
+        add(1, [sw("warmup", "Einschwimmen", "easy", 200, "ruhig, Atmung finden")]);
+        add(drills, [sw("drill", "Technikübung 50 m", "easy", 50, "abwechselnd: Abschlag (Catch-up) · Seitlage mit Beinschlag · 3er-Atmung – Fokus lang machen"), rest(15)]);
+        var k = Math.max(2, Math.floor((total - 200 - drills*50 - 100)/100));
+        add(k, [sw("work", "100 m sauber & zügig", "steady", 100, "Technik aus den Übungen beibehalten"), rest(15)]);
+        add(1, [sw("cooldown", "Ausschwimmen", "rec", 100)]);
+      } else {
+        var SE = {
+          grundlage:{len:200, level:"steady", rest:20, label:"200 m gleichmäßig"},
+          aufbau:   {len:200, level:"tempo", rest:20, label:"200 m zügig"},
+          spezifisch:{len:400, level:"thr", rest:30, label:"400 m an der Schwelle", note: longDist ? "Wenn möglich im Freiwasser/mit Neo: alle 6–8 Züge Orientierungsblick" : ""},
+          taper:    {len:100, level:"thr", rest:20, label:"100 m zügig", max:6}
+        }[phase];
+        w.title = phase === "spezifisch" ? "Schwimm-Schwelle" : "Ausdauerschwimmen";
+        w.purpose = "Baut die Schwimmausdauer auf, damit du nach dem Schwimmen noch frisch aufs Rad steigst.";
+        add(1, [sw("warmup", "Einschwimmen", "easy", 300)]);
+        var kk = Math.max(2, Math.floor((total - 300 - 200)/SE.len));
+        if(SE.max){ kk = Math.min(SE.max, kk); }
+        add(kk, [sw("work", SE.label, SE.level, SE.len, SE.note), rest(SE.rest)]);
+        add(1, [sw("cooldown", "Ausschwimmen", "rec", 200)]);
+      }
+    }
+    else if(type === "strength"){
+      w.disc = "strength";
+      w.title = "Kraft & Stabilität";
+      w.purpose = "Triathlon-spezifisches Krafttraining: stabile Hüfte, starke Waden und Rumpf beugen Verletzungen vor und verbessern die Kraftübertragung. Kein Bodybuilding – saubere Ausführung vor Gewicht.";
+      var dose = STRENGTH_DOSE[phase];
+      var count = D >= 35 ? 6 : (D >= 25 ? 5 : 4);
+      add(1, [step("warmup", "Aufwärmen & Mobilisieren", null, min(5), "Hampelmann, Beinpendel, Hüftkreisen, Ausfallschritte ohne Gewicht")]);
+      STRENGTH_EX.slice(0, count).forEach(function(ex){
+        var s = step("work", ex.n, null, {}, ex.why);
+        s.manual = true;
+        s.targetText = (ex.hold ? dose.hold : dose.reps) + (ex.d ? " · " + ex.d : "");
+        add(dose.sets, [s, step("rest", "Satzpause", null, {sec:60})]);
+      });
+    }
+    w.targetNote = targetSourceNote(w.disc, m);
+    w.metrics = m;
+    return w;
+  }
+
+  function flattenWorkout(w){
+    var out = [];
+    w.blocks.forEach(function(b){
+      for(var r = 0; r < b.reps; r++){
+        b.steps.forEach(function(s, i){
+          if(s.kind === "rest" && b.reps > 1 && r === b.reps - 1 && i === b.steps.length - 1){ return; }
+          var c = {};
+          for(var k in s){ c[k] = s[k]; }
+          c.rep = b.reps > 1 ? (r + 1) + "/" + b.reps : "";
+          out.push(c);
+        });
+      }
+    });
+    return out;
+  }
+  function stepTarget(w, s){
+    if(s.targetText){ return {primary:s.targetText, secondary:""}; }
+    if(!s.level){ return {primary:"", secondary:""}; }
+    return targetFor(w.disc, s.level, w.metrics);
+  }
+  function workoutTotalSec(w){
+    return flattenWorkout(w).reduce(function(sum, s){ return sum + (s.sec || s.estSec || (s.manual ? 45 : 0)); }, 0);
+  }
+
+  /* ---------- Detailansicht ---------- */
+  var KIND_LABEL = {warmup:"Aufwärmen", work:"Belastung", drill:"Technik", rest:"Pause", cooldown:"Ausklang"};
+  function workoutDetailHTML(w){
+    var d = DISC[w.disc] || {name:"Kraft", color:"var(--strength)"};
+    var html = '<div class="sheet-head" style="border-left-color:' + d.color + '">' +
+      '<div class="sheet-disc">' + d.name + ' · ca. ' + Math.round(workoutTotalSec(w)/60) + ' min</div>' +
+      '<h3>' + w.title + '</h3></div>' +
+      '<div class="why"><b>Warum diese Einheit?</b> ' + w.purpose + '</div>';
+    html += '<ol class="wk-steps">';
+    w.blocks.forEach(function(b){
+      var inner = b.steps.map(function(s){
+        var t = stepTarget(w, s);
+        return '<div class="wk-step k-' + s.kind + '">' +
+          '<div class="wk-amt mono">' + (s.manual ? (s.targetText || "") : fmtStepAmount(s)) + '</div>' +
+          '<div class="wk-body"><div class="wk-label">' + s.label + '</div>' +
+          (t.primary && !s.manual ? '<div class="wk-target mono">' + t.primary + '</div>' : '') +
+          (t.secondary ? '<div class="wk-sec">' + t.secondary + '</div>' : '') +
+          (s.note ? '<div class="wk-note">' + s.note + '</div>' : '') + '</div></div>';
+      }).join("");
+      html += '<li class="wk-block">' + (b.reps > 1 ? '<div class="wk-reps">' + b.reps + '× wiederholen</div>' : '') + inner + '</li>';
+    });
+    html += '</ol>';
+    if(w.targetNote){ html += '<div class="hint" style="margin:10px 0 0;">' + w.targetNote + '</div>'; }
+    html += '<button type="button" class="btn-primary" id="wkStart">▶ Training starten</button>' +
+      '<button type="button" class="btn-secondary" id="wkClose">Schließen</button>';
+    return html;
+  }
+
+  var currentWorkout = null;
+  function openWorkout(type, dur, phase){
+    var cfg = readTrainingConfig();
+    currentWorkout = buildWorkout(type, dur, phase, readProfile(), cfg);
+    var sheet = document.getElementById("wkSheet");
+    document.getElementById("wkSheetBody").innerHTML = workoutDetailHTML(currentWorkout);
+    sheet.style.display = "flex";
+    document.body.style.overflow = "hidden";
+    document.getElementById("wkSheetBody").scrollTop = 0;
+  }
+  function closeSheet(){
+    document.getElementById("wkSheet").style.display = "none";
+    document.body.style.overflow = "";
+  }
+  document.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("[data-wk-type]") : null;
+    if(b){ openWorkout(b.getAttribute("data-wk-type"), parseInt(b.getAttribute("data-wk-dur"), 10), b.getAttribute("data-wk-phase")); return; }
+    if(e.target.id === "wkClose" || e.target.id === "wkSheet"){ closeSheet(); return; }
+    if(e.target.id === "wkStart" && currentWorkout){ closeSheet(); startPlayer(currentWorkout); }
+  });
+
+  /* ---------- Workout-Player (läuft komplett im Browser, auch offline) ---------- */
+  var P = null;
+  function nowMs(){ return Date.now(); }
+  function beep(freq, ms, vol){
+    if(!P || !P.audio){ return; }
+    try{
+      var a = P.audio, o = a.createOscillator(), g = a.createGain(), t = a.currentTime;
+      o.frequency.value = freq; o.connect(g); g.connect(a.destination);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol || 0.35, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + ms/1000);
+      o.start(t); o.stop(t + ms/1000 + 0.05);
+    }catch(err){}
+  }
+  function speak(text){
+    if(!P || !P.voice || !("speechSynthesis" in window)){ return; }
+    try{
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "de-DE"; u.rate = 1.05;
+      window.speechSynthesis.speak(u);
+    }catch(err){}
+  }
+  function spokenAmount(s){
+    if(s.dist){ return s.dist + " Meter"; }
+    if(s.sec >= 60){ var mm = Math.floor(s.sec/60), ss = s.sec % 60; return mm + (mm === 1 ? " Minute" : " Minuten") + (ss ? " " + ss + " Sekunden" : ""); }
+    return s.sec + " Sekunden";
+  }
+  function requestWakeLock(){
+    if(!P || !("wakeLock" in navigator)){ return; }
+    try{ navigator.wakeLock.request("screen").then(function(l){ if(P){ P.lock = l; } }).catch(function(){}); }catch(err){}
+  }
+  document.addEventListener("visibilitychange", function(){
+    if(P && !P.done && document.visibilityState === "visible"){ requestWakeLock(); tick(); }
+  });
+
+  function stepElapsed(){
+    return P.base + (P.running ? nowMs() - P.runStart : 0);
+  }
+  function startPlayer(w){
+    var steps = flattenWorkout(w);
+    if(!steps.length){ return; }
+    P = {w:w, steps:steps, i:0, base:0, runStart:nowMs(), running:true, startedAt:nowMs(),
+         lastBeep:null, voice: P ? P.voice : true, done:false, audio:null, lock:null, timer:null};
+    try{ var AC = window.AudioContext || window.webkitAudioContext; if(AC){ P.audio = new AC(); } }catch(err){}
+    requestWakeLock();
+    document.getElementById("wkPlayer").style.display = "flex";
+    document.body.style.overflow = "hidden";
+    announceStep();
+    renderPlayer();
+    P.timer = setInterval(tick, 250);
+  }
+  function announceStep(){
+    var s = P.steps[P.i];
+    var t = stepTarget(P.w, s);
+    var lvl = s.level && LEVELS[s.level] ? ", " + LEVELS[s.level].name : "";
+    speak((s.rep ? "Durchgang " + s.rep.replace("/", " von ") + ". " : "") + s.label + ", " + (s.manual ? (s.targetText || "") : spokenAmount(s)) + lvl);
+    if(navigator.vibrate){ try{ navigator.vibrate([180, 80, 180]); }catch(err){} }
+    beep(880, 180); setTimeout(function(){ beep(1175, 260); }, 200);
+  }
+  function nextStep(){
+    if(!P){ return; }
+    P.i++;
+    if(P.i >= P.steps.length){ finishPlayer(true); return; }
+    P.base = 0; P.runStart = nowMs(); P.lastBeep = null;
+    if(!P.running){ P.running = true; }
+    announceStep();
+    renderPlayer();
+  }
+  function prevStep(){
+    if(!P || P.i === 0){ P.base = 0; P.runStart = nowMs(); renderPlayer(); return; }
+    P.i--; P.base = 0; P.runStart = nowMs(); P.running = true; P.lastBeep = null;
+    announceStep(); renderPlayer();
+  }
+  function togglePause(){
+    if(!P){ return; }
+    if(P.running){ P.base = stepElapsed(); P.running = false; }
+    else { P.runStart = nowMs(); P.running = true; }
+    renderPlayer();
+  }
+  function tick(){
+    if(!P || P.done){ return; }
+    var s = P.steps[P.i];
+    if(s.sec && !s.manual && !s.dist){
+      var rem = s.sec - stepElapsed()/1000;
+      if(rem <= 0){ nextStep(); return; }
+      var whole = Math.ceil(rem);
+      if(whole <= 3 && P.lastBeep !== whole && P.running){ P.lastBeep = whole; beep(660, 120, 0.25); }
+    }
+    updatePlayerClock();
+  }
+  function playerMainClock(s){
+    var el = stepElapsed()/1000;
+    if(s.sec && !s.dist && !s.manual){ return fmtMinSec(Math.max(0, Math.ceil(s.sec - el))); }
+    return fmtMinSec(el);
+  }
+  function updatePlayerClock(){
+    var s = P.steps[P.i];
+    var c = document.getElementById("plClock"); if(c){ c.textContent = playerMainClock(s); }
+    var tot = document.getElementById("plTotal"); if(tot){ tot.textContent = fmtMinSec((nowMs() - P.startedAt)/1000); }
+    var bar = document.getElementById("plStepBar");
+    if(bar && s.sec && !s.dist && !s.manual){ bar.style.width = Math.min(100, stepElapsed()/10/s.sec) + "%"; }
+  }
+  function renderPlayer(){
+    var s = P.steps[P.i], t = stepTarget(P.w, s), nx = P.steps[P.i + 1];
+    var d = DISC[P.w.disc] || {color:"var(--strength)"};
+    var timed = s.sec && !s.dist && !s.manual;
+    var sub = s.dist ? "Distanz – tippe „Fertig“, wenn geschafft" + (s.estSec ? " (ca. " + fmtMinSec(s.estSec) + " min)" : "")
+      : (s.manual ? "Tippe „Fertig“, wenn der Satz geschafft ist" : "verbleibend");
+    var nextTxt = nx ? (nx.label + " · " + (nx.manual ? (nx.targetText || "") : fmtStepAmount(nx))) : "Ende der Einheit";
+    document.getElementById("wkPlayer").innerHTML =
+      '<div class="pl-top"><span>' + P.w.title + '</span><span class="mono">Schritt ' + (P.i + 1) + '/' + P.steps.length + ' · <span id="plTotal">0:00</span></span></div>' +
+      '<div class="pl-progress"><div style="width:' + Math.round(P.i/P.steps.length*100) + '%;background:' + d.color + '"></div></div>' +
+      '<div class="pl-kind k-' + s.kind + '">' + (KIND_LABEL[s.kind] || "") + (s.rep ? ' · ' + s.rep : '') + '</div>' +
+      '<div class="pl-label">' + s.label + '</div>' +
+      '<div class="pl-amount mono">' + (s.manual ? (s.targetText || "") : fmtStepAmount(s)) + '</div>' +
+      '<div class="pl-clock mono" id="plClock">' + playerMainClock(s) + '</div>' +
+      '<div class="pl-sub">' + (P.running ? sub : "⏸ pausiert") + '</div>' +
+      (timed ? '<div class="pl-stepbar"><div id="plStepBar" style="background:' + d.color + '"></div></div>' : '') +
+      (t.primary && !s.manual ? '<div class="pl-target mono">' + t.primary + '</div>' : '') +
+      (t.secondary ? '<div class="pl-sec">' + t.secondary + '</div>' : '') +
+      (s.note ? '<div class="pl-note">' + s.note + '</div>' : '') +
+      '<div class="pl-next">Als Nächstes: ' + nextTxt + '</div>' +
+      '<div class="pl-buttons">' +
+        '<button type="button" class="pl-btn" id="plPrev" aria-label="Vorheriger Schritt">‹</button>' +
+        '<button type="button" class="pl-btn pl-main" id="plMain">' + (timed ? (P.running ? "❚❚ Pause" : "▶ Weiter") : "✓ Fertig") + '</button>' +
+        '<button type="button" class="pl-btn" id="plNext" aria-label="Nächster Schritt">›</button>' +
+      '</div>' +
+      '<div class="pl-footer"><label class="pl-voice"><input type="checkbox" id="plVoice"' + (P.voice ? " checked" : "") + '> Sprachansage</label>' +
+      '<button type="button" class="pl-end" id="plEnd">Einheit beenden</button></div>';
+    updatePlayerClock();
+  }
+  function finishPlayer(completed){
+    if(!P){ return; }
+    P.done = true;
+    clearInterval(P.timer);
+    try{ if(P.lock){ P.lock.release(); } }catch(err){}
+    try{ window.speechSynthesis && window.speechSynthesis.cancel(); }catch(err){}
+    var totalMin = Math.round((nowMs() - P.startedAt)/60000);
+    if(completed){ beep(880, 150); setTimeout(function(){ beep(1175, 150); }, 170); setTimeout(function(){ beep(1568, 320); }, 340); speak("Geschafft. Einheit abgeschlossen."); }
+    var chips = function(name, vals){ return '<div class="chip-group">' + vals.map(function(v, i){ return '<input type="radio" name="' + name + '" id="' + name + i + '" value="' + v[0] + '"><label class="chip" for="' + name + i + '">' + v[1] + '</label>'; }).join("") + '</div>'; };
+    document.getElementById("wkPlayer").innerHTML =
+      '<div class="pl-done">' +
+      '<div class="pl-kind">' + (completed ? "Geschafft" : "Einheit beendet") + '</div>' +
+      '<div class="pl-label">' + P.w.title + '</div>' +
+      '<div class="pl-amount mono">' + totalMin + ' min · ' + (completed ? "alle Schritte" : "Schritt " + (P.i + 1) + " von " + P.steps.length) + '</div>' +
+      '<div class="card" style="text-align:left;margin-top:18px;">' +
+        '<div class="field"><span class="title">Wie anstrengend war es? (RPE 1–10)</span>' + chips("fbRpe", [[2,"1–2"],[4,"3–4"],[6,"5–6"],[8,"7–8"],[10,"9–10"]]) + '</div>' +
+        '<div class="field"><span class="title">Im Vergleich zum Plan</span>' + chips("fbFeel", [["leichter","leichter"],["wie erwartet","wie erwartet"],["schwerer","schwerer"]]) + '</div>' +
+        '<div class="field" style="margin-bottom:0;"><span class="title">Beschwerden / Schmerzen?</span>' + chips("fbPain", [["nein","nein"],["ja","ja"]]) + '</div>' +
+      '</div>' +
+      '<button type="button" class="btn-primary" id="plSave">Speichern &amp; schließen</button>' +
+      '<button type="button" class="btn-secondary" id="plDiscard">Ohne Speichern schließen</button>' +
+      '</div>';
+    P.result = {completed: completed, totalMin: totalMin};
+  }
+  function closePlayer(save){
+    if(!P){ return; }
+    if(save){
+      var log = getState("startbereit_log", []);
+      log.push({
+        ts: new Date().toISOString(), type: P.w.type, disc: P.w.disc, title: P.w.title, phase: P.w.phase,
+        plannedMin: Math.round(workoutTotalSec(P.w)/60), actualMin: P.result.totalMin,
+        status: P.result.completed ? "geschafft" : "teilweise",
+        rpe: val("fbRpe") ? parseInt(val("fbRpe"), 10) : null, feel: val("fbFeel"), pain: val("fbPain")
+      });
+      setState("startbereit_log", log.slice(-500));
+    }
+    document.getElementById("wkPlayer").style.display = "none";
+    document.body.style.overflow = "";
+    if(P.audio){ try{ P.audio.close(); }catch(err){} }
+    P = null;
+  }
+  document.getElementById("wkPlayer").addEventListener("click", function(e){
+    var id = e.target.id;
+    if(!P){ return; }
+    if(id === "plMain"){
+      var s = P.steps[P.i];
+      if(s.sec && !s.dist && !s.manual){ togglePause(); } else { nextStep(); }
+    }
+    else if(id === "plNext"){ nextStep(); }
+    else if(id === "plPrev"){ prevStep(); }
+    else if(id === "plEnd"){ if(confirm("Einheit jetzt beenden?")){ finishPlayer(false); } }
+    else if(id === "plSave"){ closePlayer(true); }
+    else if(id === "plDiscard"){ closePlayer(false); }
+  });
+  document.getElementById("wkPlayer").addEventListener("change", function(e){
+    if(e.target.id === "plVoice" && P){ P.voice = e.target.checked; if(!P.voice){ try{ window.speechSynthesis.cancel(); }catch(err){} } }
+  });
+
+  /* ---------- Vorschau der Leistungswerte im Profil ---------- */
+  function updatePerfPreview(){
+    var el = document.getElementById("perfPreview");
+    if(!el){ return; }
+    var m = perfMetrics(readProfile());
+    var parts = [];
+    if(m.runT){ parts.push("Laufen: Schwelle ≈ " + fmtMinSec(m.runT) + " /km, locker " + fmtMinSec(m.runT*LEVELS.easy.run[0]) + "–" + fmtMinSec(m.runT*LEVELS.easy.run[1]) + " /km"); }
+    if(m.ftp){ parts.push("Rad: Grundlage " + Math.round(m.ftp*LEVELS.easy.bike[0]) + "–" + Math.round(m.ftp*LEVELS.easy.bike[1]) + " W"); }
+    if(m.css){ parts.push("Schwimmen: CSS ≈ " + fmtMinSec(m.css) + " /100 m"); }
+    el.textContent = parts.length ? "→ " + parts.join(" · ") : "";
+  }
+  ["bioRun5k","bioRun10k","bioRunThr","bioFTP","bioSwimCss","bioSwim400","bioLTHR"].forEach(function(id){
+    document.getElementById(id).addEventListener("input", updatePerfPreview);
+  });
+
 
   /* ================= ERNÄHRUNG ================= */
   var MACRO_PRESETS = {
@@ -1518,7 +2141,7 @@
   document.getElementById("printTraining").addEventListener("click", function(){ window.print(); });
   document.getElementById("printNutrition").addEventListener("click", function(){ window.print(); });
 
-  ["bioWeight","bioHeight","bioBodyfat","bioAge","bioRestingHR","bioMaxHR","bioExperience"].forEach(function(id){
+  ["bioWeight","bioHeight","bioBodyfat","bioAge","bioRestingHR","bioMaxHR","bioExperience","bioRun5k","bioRun10k","bioRunThr","bioLTHR","bioFTP","bioSwimCss","bioSwim400"].forEach(function(id){
     document.getElementById(id).addEventListener("change", saveProfile);
   });
   document.getElementById("bioInjury").addEventListener("change", saveProfile);
@@ -1635,6 +2258,10 @@
       if(p.maxHR != null) document.getElementById("bioMaxHR").value = p.maxHR;
       if(p.experienceYears != null) document.getElementById("bioExperience").value = p.experienceYears;
       document.getElementById("bioInjury").checked = !!p.injury;
+      [["bioRun5k","run5k"],["bioRun10k","run10k"],["bioRunThr","runThrPace"],["bioLTHR","lthr"],["bioFTP","ftp"],["bioSwimCss","swimCss"],["bioSwim400","swim400"]].forEach(function(f){
+        document.getElementById(f[0]).value = (p[f[1]] != null) ? p[f[1]] : "";
+      });
+      if(typeof updatePerfPreview === "function"){ updatePerfPreview(); }
     }catch(e){}
   }
 
@@ -1712,6 +2339,13 @@
       hint.textContent = "Dieser Code konnte nicht gelesen werden — bitte prüfen, ob er vollständig eingefügt wurde.";
     }
   });
+
+  /* ================= Offline-Fähigkeit (nur auf der gehosteten Seite) ================= */
+  try{
+    if("serviceWorker" in navigator && /^https?:$/.test(location.protocol) && /github\.io$|^localhost$/.test(location.hostname)){
+      window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+    }
+  }catch(err){}
 
   /* ================= Restore last session ================= */
   (function restore(){
