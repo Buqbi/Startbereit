@@ -392,6 +392,8 @@
   .k-rest .wk-label, .k-rest .wk-amt{color:var(--text-dim);font-weight:600;}
   .wk-help{font-size:13px;color:var(--text-dim);margin-top:10px;background:var(--surface-2);border-radius:8px;padding:10px 12px;}
   .wk-help summary{cursor:pointer;color:var(--text);font-weight:700;min-height:28px;}
+  .wk-icu{margin-top:12px;background:var(--surface-2);border-radius:8px;padding:12px;}
+  .wk-icu input[type=date]{width:100%;background:var(--surface);border:1px solid var(--line);color:var(--text);padding:11px 12px;border-radius:8px;font-size:15px;font-family:inherit;min-height:46px;}
   .wk-help ol{padding-left:20px;margin:8px 0;} .wk-help li{margin-bottom:4px;} .wk-help p{margin:6px 0 0;}
   .player{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;flex-direction:column;overflow:auto;
     padding:calc(14px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));text-align:center;}
@@ -534,6 +536,21 @@
         <div class="field"><label class="hint" for="bioSwim400">400-m-Zeit</label><input type="text" id="bioSwim400" placeholder="z. B. 8:00" autocomplete="off"></div>
       </div>
       <div class="hint" id="perfPreview" style="margin-top:0;"></div>
+    </div>
+
+    <div class="card">
+      <h2>Garmin-Uhr über Intervals.icu (optional)</h2>
+      <p class="hint" style="margin-bottom:10px;">Damit schickst du Einheiten direkt vom Handy auf deine Garmin – ohne PC. <a href="https://intervals.icu" target="_blank" rel="noopener">Intervals.icu</a> ist kostenlos und offizieller Garmin-Partner.</p>
+      <details class="wk-help" style="margin:0 0 12px;"><summary>Einmalig einrichten (ca. 5 Minuten)</summary><ol>
+        <li>Auf <b>intervals.icu</b> kostenloses Konto anlegen.</li>
+        <li>Dort unter <b>Settings → Connections</b> Garmin verbinden und <b>„Upload planned workouts“</b> aktivieren.</li>
+        <li>Unter <b>Settings → Developer Settings</b> einen <b>API Key</b> erzeugen und hier einfügen.</li>
+        <li>„Verbindung testen“ tippen – fertig.</li>
+      </ol><p>Der Schlüssel bleibt nur auf diesem Gerät und wird nicht ins Backup übernommen.</p></details>
+      <div class="field"><label class="hint" for="icuKey">API Key</label><input type="password" id="icuKey" autocomplete="off" placeholder="aus Intervals.icu → Developer Settings"></div>
+      <div class="field"><label class="hint" for="icuAthlete">Athleten-ID (optional)</label><input type="text" id="icuAthlete" autocomplete="off" placeholder="leer lassen = automatisch"></div>
+      <button type="button" class="btn-secondary" id="icuTest">Verbindung testen</button>
+      <div class="hint" id="icuHint"></div>
     </div>
 
     <div class="card">
@@ -1038,7 +1055,7 @@
           html += '<div class="session" style="border-left-color:' + DISC[s.disc].color + '">' +
             '<div class="s-name">' + DISC[s.disc].name + ' — ' + s.label + '</div>' +
             '<div class="s-meta mono">' + s.duration + ' min' + zoneTag + '</div>' +
-            (s.type ? '<button type="button" class="wk-open" data-wk-type="' + s.type + '" data-wk-dur="' + s.duration + '" data-wk-phase="' + (plan.phaseKey || "") + '">Ablauf &amp; Start ›</button>' : '') +
+            (s.type ? '<button type="button" class="wk-open" data-wk-type="' + s.type + '" data-wk-dur="' + s.duration + '" data-wk-phase="' + (plan.phaseKey || "") + '" data-wk-day="' + s.day + '">Ablauf &amp; Start ›</button>' : '') +
             '</div>';
         });
       }
@@ -1687,6 +1704,113 @@
     setTimeout(function(){ URL.revokeObjectURL(url); a.parentNode && a.parentNode.removeChild(a); }, 1500);
   }
 
+  /* ---------- Intervals.icu → Garmin Connect → Uhr ---------- */
+  var ICU_SPORT = {run:"Run", bike:"Ride", swim:"Swim", strength:"WeightTraining"};
+  function icuConfig(){ return getState("startbereit_intervals", null); }
+  function icuAuth(c){ return "Basic " + btoa("API_KEY:" + c.key); }
+  function icuAthlete(c){ return (c.athlete && /^i?\d+$/.test(c.athlete)) ? c.athlete : "0"; } // 0 = Konto des Schlüssels
+  function icuFetch(c, path, opts){
+    opts = opts || {};
+    opts.headers = {"Authorization": icuAuth(c), "Content-Type": "application/json", "Accept": "application/json"};
+    return fetch("https://intervals.icu/api/v1/athlete/" + icuAthlete(c) + path, opts).then(function(res){
+      if(res.status === 401 || res.status === 403){ throw new Error("auth"); }
+      if(!res.ok){ return res.text().then(function(t){ throw new Error("http " + res.status + (t ? ": " + t.slice(0,120) : "")); }); }
+      return res.json();
+    }, function(){ throw new Error("network"); });
+  }
+  function icuErrorText(err){
+    if(err.message === "auth"){ return "API Key oder Athleten-ID wird nicht akzeptiert – bitte prüfen."; }
+    if(err.message === "network"){ return "Keine Verbindung zu Intervals.icu. Entweder kein Internet – oder Intervals.icu lässt Anfragen direkt aus dem Browser nicht zu. Dann gib mir Bescheid."; }
+    return "Fehler von Intervals.icu (" + err.message + ").";
+  }
+  function icuDur(sec){
+    var m = Math.floor(sec/60), s2 = Math.round(sec % 60);
+    return (m ? m + "m" : "") + (s2 ? s2 + "s" : "") || "1s";
+  }
+  function icuCleanLabel(t){
+    // Zahlen/Einheiten aus dem Namen entfernen, damit der Parser sie nicht als Dauer liest
+    return String(t).replace(/\d+\s*(min|m|s|km|x|×)?\b/g, "").replace(/[&–-]+/g, " ").replace(/\s+/g, " ").trim();
+  }
+  function icuTarget(w, s){
+    var L = LEVELS[s.level], m = w.metrics;
+    if(!L || s.kind === "rest" || s.manual){ return ""; }
+    if(w.disc === "run" && m.runT){ return fmtMinSec(m.runT*L.run[0]) + "-" + fmtMinSec(m.runT*L.run[1]) + "/km Pace"; }
+    if(w.disc === "bike" && m.ftp){ return Math.round(m.ftp*L.bike[0]) + "-" + Math.round(m.ftp*L.bike[1]) + "w"; }
+    if(w.disc === "swim" && m.css){ return fmtMinSec(m.css + L.swim[0]) + "-" + fmtMinSec(m.css + L.swim[1]) + "/100m Pace"; }
+    if((w.disc === "run" || w.disc === "bike") && s.level !== "vo2"){
+      if(m.lthr){ return Math.round(L.lthr[0]*100) + "-" + Math.round(L.lthr[1]*100) + "% LTHR"; }
+      var hr = hrRangeNums(s.level, m);
+      if(hr && m.hrmax){ return Math.round(hr[0]/m.hrmax*100) + "-" + Math.round(hr[1]/m.hrmax*100) + "% HR"; }
+    }
+    return "";
+  }
+  function icuDescription(w){
+    if(w.disc === "strength"){
+      var out = [w.purpose, ""];
+      w.blocks.forEach(function(b){ b.steps.forEach(function(s){ if(s.kind !== "rest"){ out.push("• " + s.label + (s.targetText ? ": " + (b.reps > 1 ? b.reps + " Sätze × " : "") + s.targetText : (s.sec ? " (" + Math.round(s.sec/60) + " min)" : ""))); } }); });
+      return out.join("\n");
+    }
+    var lines = [];
+    w.blocks.forEach(function(b){
+      var first = b.steps[0];
+      if(b.reps > 1){ lines.push("Main Set " + b.reps + "x"); }
+      else if(first.kind === "warmup"){ lines.push("Warmup"); }
+      else if(first.kind === "cooldown"){ lines.push("Cooldown"); }
+      b.steps.forEach(function(s){
+        var amount = s.dist ? s.dist + "mtr" : icuDur(s.sec || 60);
+        lines.push("- " + [icuCleanLabel(s.label), amount, icuTarget(w, s)].filter(Boolean).join(" "));
+      });
+      lines.push("");
+    });
+    return lines.join("\n").trim() + "\n\n" + w.purpose;
+  }
+  var WEEKDAY_IDX = {Sonntag:0, Montag:1, Dienstag:2, Mittwoch:3, Donnerstag:4, Freitag:5, Samstag:6};
+  function isoDate(d){ return d.getFullYear() + "-" + ("0" + (d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function nextDateFor(day){
+    var d = new Date();
+    if(day && WEEKDAY_IDX[day] != null){ d.setDate(d.getDate() + ((WEEKDAY_IDX[day] - d.getDay() + 7) % 7)); }
+    return isoDate(d);
+  }
+  function icuSend(w, date){
+    var c = icuConfig();
+    var body = {category:"WORKOUT", start_date_local: date + "T00:00:00", type: ICU_SPORT[w.disc] || "Other",
+                name: "SB " + w.title, description: icuDescription(w), moving_time: Math.round(workoutTotalSec(w))};
+    return icuFetch(c, "/events", {method:"POST", body: JSON.stringify(body)});
+  }
+  function icuSheetHTML(w){
+    var c = icuConfig();
+    if(!c || !c.key){
+      return '<div class="wk-help"><b>Direkt aufs Handy → Garmin:</b> Richte im Profil einmalig „Garmin-Uhr über Intervals.icu“ ein, dann kannst du Einheiten hier mit einem Tipp an deine Uhr schicken.</div>';
+    }
+    return '<div class="wk-icu"><span class="title">An Garmin-Uhr senden (über Intervals.icu)</span>' +
+      '<div class="row2" style="align-items:end;"><div><label class="hint" for="icuDate">Datum</label><input type="date" id="icuDate" value="' + nextDateFor(w.day) + '"></div>' +
+      '<button type="button" class="btn-primary" id="icuSend" style="margin:0;">Senden</button></div>' +
+      '<div class="hint" id="icuSendHint"></div></div>';
+  }
+  document.getElementById("icuTest").addEventListener("click", function(){
+    var hint = document.getElementById("icuHint");
+    var key = document.getElementById("icuKey").value.trim(), ath = document.getElementById("icuAthlete").value.trim();
+    if(!key){ hint.textContent = "Bitte zuerst den API Key einfügen."; return; }
+    var c = {key:key, athlete:ath};
+    hint.textContent = "Teste Verbindung …";
+    icuFetch(c, "").then(function(a){
+      setState("startbereit_intervals", c);
+      hint.textContent = "✓ Verbunden" + (a && a.name ? " als " + a.name : "") + ". Du kannst Einheiten jetzt direkt an deine Uhr senden.";
+    }).catch(function(err){ hint.textContent = icuErrorText(err); });
+  });
+  document.getElementById("wkSheet").addEventListener("click", function(e){
+    if(e.target.id !== "icuSend" || !currentWorkout){ return; }
+    var btn = e.target, hint = document.getElementById("icuSendHint"), date = document.getElementById("icuDate").value;
+    if(!date){ hint.textContent = "Bitte ein Datum wählen."; return; }
+    btn.disabled = true; hint.textContent = "Sende …";
+    icuSend(currentWorkout, date).then(function(ev){
+      var n = ev && ev.workout_doc && ev.workout_doc.steps ? ev.workout_doc.steps.length : null;
+      hint.textContent = "✓ Gesendet für " + new Date(date + "T12:00:00").toLocaleDateString("de-DE", {weekday:"long", day:"numeric", month:"long"}) +
+        (n ? " (" + n + " Abschnitte erkannt)" : "") + ". Nach dem nächsten Sync von Garmin Connect ist die Einheit auf der Uhr unter Training → Workouts bzw. im Kalender.";
+    }).catch(function(err){ hint.textContent = icuErrorText(err); }).then(function(){ btn.disabled = false; });
+  });
+  (function(){ var c = icuConfig(); if(c){ document.getElementById("icuKey").value = c.key || ""; document.getElementById("icuAthlete").value = c.athlete || ""; } })();
+
   /* ---------- Detailansicht ---------- */
   var KIND_LABEL = {warmup:"Aufwärmen", work:"Belastung", drill:"Technik", rest:"Pause", cooldown:"Ausklang"};
   function workoutDetailHTML(w){
@@ -1711,21 +1835,23 @@
     html += '</ol>';
     if(w.targetNote){ html += '<div class="hint" style="margin:10px 0 0;">' + w.targetNote + '</div>'; }
     html += '<button type="button" class="btn-primary" id="wkStart">▶ Training starten</button>' +
+      icuSheetHTML(w) +
       '<button type="button" class="btn-secondary wk-fit" id="wkFit">⌚ Für Garmin-Uhr herunterladen (.FIT)</button>' +
       '<details class="wk-help"><summary>So kommt die Einheit auf deine Garmin</summary><ol>' +
-        '<li>Datei am <b>PC</b> herunterladen (Button oben).</li>' +
+        '<li>Datei am <b>PC</b> herunterladen (Button oben). Vom Handy aus geht es nur über Intervals.icu – das Teilen an Garmin Connect legt eine falsche Aktivität an.</li>' +
         '<li>Uhr per USB-Kabel anschließen – sie erscheint als Laufwerk.</li>' +
         '<li>Die .fit-Datei in den Ordner <span class="mono">GARMIN/NewFiles</span> kopieren.</li>' +
         '<li>Uhr trennen. Die Einheit findest du unter <b>Training → Workouts</b> (Name beginnt mit „SB“).</li>' +
-      '</ol><p>Die Uhr führt dich dann selbst durch alle Schritte, inkl. Pace-/Watt-/Puls-Alarm. Direkt vom Handy auf die Uhr geht leider nicht – Garmin lässt das nur über die eigene Connect-App zu.</p></details>' +
+      '</ol><p>Die Uhr führt dich dann selbst durch alle Schritte, inkl. Pace-/Watt-/Puls-Alarm.</p></details>' +
       '<button type="button" class="btn-secondary" id="wkClose">Schließen</button>';
     return html;
   }
 
   var currentWorkout = null;
-  function openWorkout(type, dur, phase){
+  function openWorkout(type, dur, phase, day){
     var cfg = readTrainingConfig();
     currentWorkout = buildWorkout(type, dur, phase, readProfile(), cfg);
+    currentWorkout.day = day || null;
     var sheet = document.getElementById("wkSheet");
     document.getElementById("wkSheetBody").innerHTML = workoutDetailHTML(currentWorkout);
     sheet.style.display = "flex";
@@ -1738,7 +1864,7 @@
   }
   document.addEventListener("click", function(e){
     var b = e.target.closest ? e.target.closest("[data-wk-type]") : null;
-    if(b){ openWorkout(b.getAttribute("data-wk-type"), parseInt(b.getAttribute("data-wk-dur"), 10), b.getAttribute("data-wk-phase")); return; }
+    if(b){ openWorkout(b.getAttribute("data-wk-type"), parseInt(b.getAttribute("data-wk-dur"), 10), b.getAttribute("data-wk-phase"), b.getAttribute("data-wk-day")); return; }
     if(e.target.id === "wkClose" || e.target.id === "wkSheet"){ closeSheet(); return; }
     if(e.target.id === "wkStart" && currentWorkout){ closeSheet(); startPlayer(currentWorkout); }
     if(e.target.id === "wkFit" && currentWorkout){ downloadFit(currentWorkout); }
@@ -2293,7 +2419,7 @@
     var data = {};
     for(var i = 0; i < localStorage.length; i++){
       var k = localStorage.key(i);
-      if(k && k.indexOf("startbereit_") === 0){ data[k] = localStorage.getItem(k); }
+      if(k && k.indexOf("startbereit_") === 0 && k !== "startbereit_intervals"){ data[k] = localStorage.getItem(k); } // Zugangsschlüssel bleibt auf dem Gerät
     }
     return {app:"startbereit", v:1, exportedAt:new Date().toISOString(), data:data};
   }
